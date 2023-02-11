@@ -1,14 +1,41 @@
-import "./globals.css";
+import Header from "./header";
+import Footer from "./footer";
+import './globals.css';
+import localFont from '@next/font/local';
 
-export default function RootLayout({ children }) {
-    return (
-        <html lang="en">
-            {/*
-        <head /> will contain the components returned by the nearest parent
-        head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-            <head />
-            <body>{children}</body>
-        </html>
-    );
+// Font files can be colocated inside of `app`
+const walsheim = localFont({
+  src: './GTWalsheimPro-Medium.woff2',
+  display: 'swap',
+});
+
+async function getData() {
+  const res = await fetch(`${process.env.API_BASE_URL}/navigation/`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  return res.json();
+}
+
+
+export default async function RootLayout({ children }) {
+  const data = await getData();
+
+  return (
+    <html lang="en" className={walsheim.className}>
+      <head>
+        {/* Fontawesome icons cracked */}
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
+        />
+      </head>
+      <body className="min-h-screen flex flex-col">
+        <Header navigation={data} />
+        {children}
+        <Footer />
+      </body>
+    </html>
+  );
 }
