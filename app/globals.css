@@ -1,3 +1,75 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  :root {
+    --nav-size: 60px;
+    --border-radius: 8px;
+    --speed: 500ms;
+  }
+  .ul {
+    @apply m-0 list-none p-0;
+  }
+  .a {
+    @apply no-underline;
+    color: var(--text-color);
+  }
+
+  .navbar-nav {
+    @apply flex h-full max-w-full justify-end;
+  }
+
+  .nav-item {
+    @apply flex items-center justify-center;
+    width: calc(var(--nav-size) * 0.8);
+  }
+
+  .icon-button {
+    @apply m-[2px] flex items-center justify-center rounded-[50%] p-[2px] text-black transition-all duration-300;
+    --button-size: calc(var(--nav-size) * 0.5);
+    width: var(--button-size);
+    height: var(--button-size);
+    transition: filter 300ms;
+  }
+
+  .dropdown {
+    @apply absolute top-[58px] w-[300px] overflow-hidden border-2 border-slate-800 bg-slate-200;
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    transition: height var(--speed) ease;
+  }
+
+  .menu {
+    @apply w-full;
+  }
+
+  .menu-item {
+    @apply flex h-[40px] items-center text-sm;
+    border-radius: var(--border-radius);
+    transition: background var(--speed);
+    padding: 0.5rem;
+  }
+
+  .menu-item .icon-button {
+    margin-right: 0.5rem;
+  }
+
+  .menu-tem .icon-button:hover {
+    filter: none;
+  }
+
+  .menu-item:hover {
+    @apply border-2 border-slate-900;
+  }
+
+  .icon-right {
+    @apply ml-auto;
+  }
+}

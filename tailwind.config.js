@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamilyfontFamily: {
-        walsheim: ['var(--font-walsheim)'],
+        walsheim: ["var(--font-walsheim)"],
       },
     },
   },
