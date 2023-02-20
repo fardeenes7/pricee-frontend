@@ -1,16 +1,24 @@
 import Link from "next/link";
+import BannerGrid from "components/landing/bannergrid";
+import CategoryGrid from "@/components/landing/CategoryGrid";
+import ProductGrid from "components/landing/productgrid";
 
 async function getData() {
-  const res = await fetch(`${process.env.API_BASE_URL}/products/all/`);
+  const res = await fetch(`${process.env.API_BASE_URL}/landing`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
 
   return res.json();
 }
-
 export default async function Home() {
   const data = await getData();
 
-  return <main className="mx-auto w-full max-w-7xl px-4"></main>;
+  return (
+    <main className="">
+      <BannerGrid data={data.bannerAds} />
+      <CategoryGrid data={data.categories} />
+      <ProductGrid data={data.products} />
+    </main>
+  );
 }

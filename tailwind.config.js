@@ -8,10 +8,21 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamilyfontFamily: {
         walsheim: ["var(--font-walsheim)"],
+      },
+      colors: {
+        primary: "#101011",
+        secondary: "#FAF9F6",
+        accent: {
+          0: "#ffedd5",
+          1: "#E86840",
+          2: "#d1552e",
+        },
+        complement: "#4CAF50",
       },
     },
   },

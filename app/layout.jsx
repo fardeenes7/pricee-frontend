@@ -5,7 +5,29 @@ import localFont from "@next/font/local";
 
 // Font files can be colocated inside of `app`
 const walsheim = localFont({
-  src: "./GTWalsheimPro-Medium.woff2",
+  src: [
+    {
+      path: "./GTWalsheimPro-Light.woff2",
+      weight: "300",
+      style: "thin",
+    },
+    {
+      path: "./GTWalsheimPro-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./GTWalsheimPro-Medium.woff2",
+      weight: "500",
+      style: "medium",
+    },
+    {
+      path: "./GTWalsheimPro-Bold.woff2",
+      weight: "700",
+      style: "bold",
+    },
+  ],
+  variable: "--font-walsheim",
   display: "swap",
 });
 
@@ -22,7 +44,7 @@ export default async function RootLayout({ children }) {
   const data = await getData();
 
   return (
-    <html lang="en" className={walsheim.className}>
+    <html lang="en" className={`${walsheim.variable}`}>
       <head>
         {/* Fontawesome icons cracked */}
         <link
@@ -32,7 +54,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body className="flex min-h-screen flex-col">
         <Header navigation={data} />
-        {children}
+        <div className="mx-4 w-full max-w-7xl py-4 lg:mx-auto">{children}</div>
         <Footer />
       </body>
     </html>

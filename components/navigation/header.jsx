@@ -8,6 +8,7 @@ import Link from "next/link";
 export default function Header({ navigation }) {
   const [open, setOpen] = useState(0);
   const dropdownRef = useRef(null);
+  const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {
     window.onclick = (event) => {
       if (
@@ -19,14 +20,19 @@ export default function Header({ navigation }) {
     };
   }, []);
   return (
-    <div className="w-full bg-slate-100 shadow-lg">
-      <nav className="navbar mx-auto flex max-w-7xl justify-between py-4">
+    <div className="sticky top-0 z-50 w-full bg-slate-100 shadow-lg">
+      <nav className="navbar mx-6 flex max-w-7xl items-center justify-between py-4 sm:items-center lg:mx-auto">
+        <div className="block md:hidden">
+          <button>
+            <i className="fa-solid fa-bars"></i>
+          </button>
+        </div>
         <div className="flex items-center justify-center">
           <Link href="/" className="text-2xl font-bold">
             pricee
           </Link>
-          <div className="mx-6 flex items-center gap-6">
-            <ul className="navbar-nav">
+          <div className="mx-6 hidden items-center gap-6 lg:flex">
+            <ul className="navbar-nav ">
               <NavItem
                 open={open}
                 changeopen={() => (open === 1 ? setOpen(0) : setOpen(1))}
@@ -41,27 +47,34 @@ export default function Header({ navigation }) {
                 ></DropdownMenu>
               </NavItem>
             </ul>
-            {navigation.shops.map((shop) => (
-              <Link href={`/shop/${shop.name}`} className="text-sm">
+            {navigation.shops.map((shop, id) => (
+              <Link href={`/shop/${shop.name}`} className="text-sm" key={id}>
                 {shop.name}
               </Link>
             ))}
           </div>
         </div>
-        <div className="mx-6 flex items-center gap-6">
+        <div className="flex items-center">
           <ul className="navbar-nav">
-            <NavItem2
-              open={open}
-              changeopen={() => (open === 2 ? setOpen(0) : setOpen(2))}
-              changeeclose={() => setOpen(0)}
-              icon="fa-solid fa-caret-down"
-            >
-              <DropdownMenu2
-                dropdownRef={dropdownRef}
+            {loggedIn ? (
+              <NavItem2
+                open={open}
                 changeopen={() => (open === 2 ? setOpen(0) : setOpen(2))}
-                navigation={navigation}
-              ></DropdownMenu2>
-            </NavItem2>
+                changeeclose={() => setOpen(0)}
+                icon="fa-solid fa-caret-down"
+                name="Login"
+              >
+                <DropdownMenu2
+                  dropdownRef={dropdownRef}
+                  changeopen={() => (open === 2 ? setOpen(0) : setOpen(2))}
+                  navigation={navigation}
+                ></DropdownMenu2>
+              </NavItem2>
+            ) : (
+              <button className="rounded-md bg-accent-1 px-4 py-2 text-sm font-semibold text-secondary hover:bg-accent-2">
+                Login
+              </button>
+            )}
           </ul>
         </div>
       </nav>
@@ -75,7 +88,7 @@ function Navbar(props) {
 
 function NavItem({ open, changeopen, ...props }) {
   return (
-    <button className="nav-item w-full rounded-lg border-2 border-slate-700">
+    <button className="nav-item w-full rounded-lg border-2 border-accent-1 font-medium">
       <a className="px-4 py-1" onClick={changeopen}>
         <span className="font mr-2 text-sm">{props.name}</span>
         <i className={props.icon}></i>
@@ -88,8 +101,9 @@ function NavItem({ open, changeopen, ...props }) {
 
 function NavItem2({ open, changeopen, ...props }) {
   return (
-    <li className="nav-item">
-      <a href="#" className="icon-button" onClick={changeopen}>
+    <li className="nav-item w-full rounded-lg border-2 border-accent-1 font-medium">
+      <a href="#" className="px-4 py-1" onClick={changeopen}>
+        <span className="font mr-2 text-sm">{props.name}</span>
         <i className={props.icon}></i>
       </a>
 
@@ -193,12 +207,13 @@ function DropdownMenu({ changeopen, navigation, dropdownRef }) {
             >
               All {category.name}
             </DropdownItem>
-            {category.sub_categories.map((subcategory) => (
+            {category.sub_categories.map((subcategory, id) => (
               <DropdownItem
                 leftIcon="fa-duotone fa-bolt"
                 category={category.slug}
                 subcategory={subcategory.slug}
                 changeopenstate={changeopen}
+                key={id}
               >
                 {subcategory.name}
               </DropdownItem>
