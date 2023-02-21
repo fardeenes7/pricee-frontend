@@ -1,8 +1,7 @@
-export default async function ProductSubcategory({ params }) {
-  const { category, subcategory } = params;
-  return (
-    <h1>
-      Category {category} Subcategory {subcategory}
-    </h1>
-  );
+import ProductGrid from "@/components/products/ProductGrid";
+
+export default function ProductSubCategory({ params }) {
+  const { subcategory } = params;
+
+  return <ProductGrid subcategory={subcategory} />;
 }

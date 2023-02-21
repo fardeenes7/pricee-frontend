@@ -1,10 +1,10 @@
 import Link from "next/link";
 import BannerGrid from "components/landing/bannergrid";
 import CategoryGrid from "@/components/landing/CategoryGrid";
-import ProductGrid from "components/landing/productgrid";
+import ProductGrid from "components/products/ProductGrid";
 
 async function getData() {
-  const res = await fetch(`${process.env.API_BASE_URL}/landing`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/landing`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -15,10 +15,10 @@ export default async function Home() {
   const data = await getData();
 
   return (
-    <main className="">
+    <div className="">
       <BannerGrid data={data.bannerAds} />
       <CategoryGrid data={data.categories} />
-      <ProductGrid data={data.products} />
-    </main>
+      <ProductGrid products={data.products} />
+    </div>
   );
 }

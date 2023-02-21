@@ -20,9 +20,9 @@ export default function Header({ navigation }) {
     };
   }, []);
   return (
-    <div className="sticky top-0 z-50 w-full bg-slate-100 shadow-lg">
+    <div className="sticky top-0 z-50 w-full bg-slate-100 px-4 shadow-lg">
       <nav className="navbar mx-6 flex max-w-7xl items-center justify-between py-4 sm:items-center lg:mx-auto">
-        <div className="block md:hidden">
+        <div className="block lg:hidden">
           <button>
             <i className="fa-solid fa-bars"></i>
           </button>

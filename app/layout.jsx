@@ -32,7 +32,9 @@ const walsheim = localFont({
 });
 
 async function getData() {
-  const res = await fetch(`${process.env.API_BASE_URL}/navigation/`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/navigation/`
+  );
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -54,7 +56,9 @@ export default async function RootLayout({ children }) {
       </head>
       <body className="flex min-h-screen flex-col">
         <Header navigation={data} />
-        <div className="mx-4 w-full max-w-7xl py-4 lg:mx-auto">{children}</div>
+        <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

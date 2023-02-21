@@ -1,4 +1,10 @@
+import ProductGrid from "@/components/products/ProductGrid";
+
 export default function ProductCategory({ params }) {
-    const { category } = params;
-    return <h1>Category {category}</h1>;
+  const { category } = params;
+  if (category === "all") {
+    return <ProductGrid />;
+  }
+
+  return <ProductGrid category={category} />;
 }
