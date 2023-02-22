@@ -17,26 +17,6 @@ export default async function BannerGrid({ data }) {
           />
         </div>
       ))}
-      {/* {data.bannerAds.map((banner) => (
-        <div
-          className={`overflow-hidden rounded-xl ${
-            banner.size === "2x1"
-              ? "order-last col-span-2 row-span-1 lg:col-span-2"
-              : `${
-                  banner.size === "1x1"
-                    ? "col-span-1 row-span-1"
-                    : "col-span-1 row-span-2"
-                }`
-          }`}
-          key={banner.id}
-        >
-          <img
-            className="h-full w-full object-cover"
-            src={`${process.env.MEDIA_URL}/${banner.image}`}
-            alt={banner.name}
-          />
-        </div>
-      ))} */}
     </div>
   );
 }

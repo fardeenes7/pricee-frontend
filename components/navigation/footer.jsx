@@ -208,10 +208,7 @@ export default function Example() {
                 placeholder="Enter your email"
               />
               <div className="mt-3 rounded-md sm:mt-0 sm:ml-3 sm:flex-shrink-0">
-                <button
-                  type="submit"
-                  className="focus:ring-accent flex w-full items-center justify-center rounded-md border border-transparent bg-accent-1 py-2 px-4 text-sm font-medium text-white hover:bg-accent-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-secondary"
-                >
+                <button type="submit" className="btn">
                   Subscribe
                 </button>
               </div>
@@ -232,7 +229,7 @@ export default function Example() {
             ))}
           </div>
           <p className="mt-8 text-sm text-gray-400 md:order-1 md:mt-0">
-            &copy; 2020 Workflow, Inc. All rights reserved.
+            &copy; 2023 Pricee, Inc. All rights reserved.
           </p>
         </div>
       </div>

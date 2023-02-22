@@ -13,5 +13,23 @@ export default async function Product({ params }) {
   const { slug } = params;
   const data = await getData({ slug });
 
-  return <div>{data.name}</div>;
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-3">
+        <div>
+          <img
+            src={data.images[0].href}
+            className="h-full w-full"
+            animate={{ scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+          ></img>
+        </div>
+        <div className="col-span-2">
+          <h1 className="text-md font-bold">{data.name}</h1>
+          <h2>{data.best_price}</h2>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  );
 }
