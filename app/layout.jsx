@@ -1,7 +1,7 @@
 import Header from "../components/navigation/header";
 import Footer from "../components/navigation/footer";
 import "./globals.css";
-import localFont from "@next/font/local";
+import localFont from "next/font/local";
 
 // Font files can be colocated inside of `app`
 const walsheim = localFont({
