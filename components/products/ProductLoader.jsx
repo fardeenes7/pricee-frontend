@@ -1,6 +1,6 @@
 export default function ProductLoader() {
   return (
-    <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
+    <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
       {[...Array(5)].map((e) => (
         <div className="flex animate-pulse flex-col overflow-hidden rounded-xl border-2 shadow-lg">
           <div className="flex-shrink-0">
@@ -11,7 +11,7 @@ export default function ProductLoader() {
             <div className="h-4 w-full rounded-md bg-gray-300"></div>
 
             <div className="flex items-center justify-between">
-              <div className="flex flex-1 flex-col gap-2">
+              <div className="flex flex-1 flex-col gap-1 md:gap-2">
                 <div className="h-4 w-24 rounded-md bg-gray-300"></div>
                 <div className="h-4 w-12 rounded-md bg-gray-300"></div>
               </div>

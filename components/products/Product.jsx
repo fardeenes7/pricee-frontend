@@ -17,7 +17,7 @@ export default function Product({ product }) {
         />
       </div>
       <div className="flex h-full flex-col justify-between gap-6 p-4">
-        <h1 className="text-sm font-medium transition-all duration-500 group-hover:text-complement">
+        <h1 className="text-xs font-medium transition-all duration-500 group-hover:text-complement md:text-sm">
           {product.name}
         </h1>
         <div className="flex items-end justify-between">

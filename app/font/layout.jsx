@@ -7,22 +7,22 @@ import localFont from "next/font/local";
 const walsheim = localFont({
   src: [
     {
-      path: "./font/GTWalsheimPro-Light.woff2",
+      path: "./GTWalsheimPro-Light.woff2",
       weight: "300",
       style: "thin",
     },
     {
-      path: "./font/GTWalsheimPro-Regular.woff2",
+      path: "./GTWalsheimPro-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "./font/GTWalsheimPro-Medium.woff2",
+      path: "./GTWalsheimPro-Medium.woff2",
       weight: "500",
       style: "medium",
     },
     {
-      path: "./font/GTWalsheimPro-Bold.woff2",
+      path: "./GTWalsheimPro-Bold.woff2",
       weight: "700",
       style: "bold",
     },

@@ -42,9 +42,11 @@ export default function ProductGrid(props) {
   return (
     <div className="product-grid">
       <h1 className="my-2 text-2xl font-bold">
-        {props.category && `${props.category.toUpperCase()}`}
-        {props.subcategory && ` ${props.subcategory.toUpperCase()}`}
-        {props.search && `Search For:  ${props.search.toUpperCase()}`}
+        {props.category && `${props.category.replace(/-/g, " ").toUpperCase()}`}
+        {props.subcategory &&
+          ` ${props.subcategory.replace(/-/g, " ").toUpperCase()}`}
+        {props.search &&
+          `Search For:  ${props.search.replace(/-/g, " ").toUpperCase()}`}
         {!props.category &&
           !props.subcategory &&
           !props.search &&
@@ -58,7 +60,7 @@ export default function ProductGrid(props) {
         endMessage={endMessage()}
       >
         {products.length != 0 && (
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
+          <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
             {products.map((product, id) => (
               <Product product={product} key={id} />
             ))}

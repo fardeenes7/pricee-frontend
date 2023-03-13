@@ -32,7 +32,7 @@ export default function Header({ navigation }) {
             pricee
           </Link>
           <div className="mx-6 hidden items-center gap-6 lg:flex">
-            <ul className="navbar-nav ">
+            <ul className="navbar-nav">
               <NavItem
                 open={open}
                 changeopen={() => (open === 1 ? setOpen(0) : setOpen(1))}
@@ -44,6 +44,7 @@ export default function Header({ navigation }) {
                   dropdownRef={dropdownRef}
                   changeopen={() => (open === 1 ? setOpen(0) : setOpen(1))}
                   navigation={navigation}
+                  className=" overflow-scroll"
                 ></DropdownMenu>
               </NavItem>
             </ul>
