@@ -33,7 +33,7 @@ const walsheim = localFont({
 
 async function getData() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/navigation/`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${process.env.NEXT_PUBLIC_API_VERSION}/navigation/`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch data");

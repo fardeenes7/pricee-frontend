@@ -36,7 +36,7 @@ export default async function handler(req) {
           background: "#ffffff",
           width: "100%",
           height: "100%",
-          paddingTop: 50,
+          paddingTop: 20,
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
@@ -50,16 +50,25 @@ export default async function handler(req) {
             flexDirection: "row",
             justifyContent: "space-between",
           }}
-          tw="p-8 w-full overflow-clip"
+          tw="p-8 w-full"
         >
-          <p tw="text-gray-500 mr-8">
-            Product/<span tw="font-bold text-black">{title}</span>
-          </p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              justifyItems: "flex-start",
+            }}
+            tw="w-4/6"
+          >
+            <h1 tw="text-gray-500 mr-8">Product/</h1>
+            <h2 tw="font-bold text-black">{title}</h2>
+          </div>
           <img
             width="256"
             height="256"
             src={image}
-            tw="border-2 border-gray-800 rounded-3xl ml-4"
+            tw="border-2 border-gray-800 rounded-3xl ml-4 mt-8"
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>

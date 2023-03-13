@@ -6,7 +6,7 @@ import Suggestions from "./Suggestions";
 
 async function getData({ slug }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${process.env.NEXT_PUBLIC_API_VERSION}/products/${slug}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch data");

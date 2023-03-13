@@ -12,7 +12,7 @@ export default async function BannerGrid({ data }) {
         >
           <img
             className="h-full w-full object-cover"
-            src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${banner.image}`}
+            src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${banner.image}`}
             alt={banner.name}
           />
         </div>

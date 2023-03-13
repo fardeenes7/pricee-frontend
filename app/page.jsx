@@ -4,7 +4,9 @@ import CategoryGrid from "@/components/landing/CategoryGrid";
 import ProductGrid from "components/products/ProductGrid";
 
 async function getData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/landing`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${process.env.NEXT_PUBLIC_API_VERSION}/landing`
+  );
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
