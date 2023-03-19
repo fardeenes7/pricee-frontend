@@ -62,7 +62,7 @@ export default function CategoryGrid() {
           <div className="col-span-1" key={id}>
             <Link
               href={`/category/${category.slug}`}
-              className="category-card flex flex-col items-center justify-center gap-2 rounded-lg border-2 bg-secondary py-5 font-bold hover:border-accent-1"
+              className="category-card flex flex-col items-center justify-center gap-2 rounded-lg border-2 bg-white py-5 font-bold hover:border-accent-1"
             >
               <Image
                 src={category.image}

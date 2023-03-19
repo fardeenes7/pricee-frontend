@@ -23,7 +23,7 @@ export default function ProductGrid(props) {
   }, [page]);
 
   const fetchData = async () => {
-    const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${process.env.NEXT_PUBLIC_API_VERSION}/products?page=${page}${category}${subcategory}`;
+    const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/products?page=${page}${category}${subcategory}`;
     try {
       const response = await fetch(endpoint, {
         method: "GET",

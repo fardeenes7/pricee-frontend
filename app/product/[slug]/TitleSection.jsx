@@ -1,6 +1,19 @@
+"use client";
+import DetailModal from "./detailModal";
+import { useState } from "react";
+
 export default function TitleSection(props) {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [currentLink, setCurrentLink] = useState(props.links[0]);
+
   return (
     <div className="flex flex-col gap-4">
+      <DetailModal
+        show={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        link={currentLink}
+        title={props.name}
+      />
       <h1 className=" font-bold md:text-xl">{props.name}</h1>
       <div className="flex flex-col gap-2 text-sm">
         <h1 className="font-bold">
@@ -18,6 +31,10 @@ export default function TitleSection(props) {
               "row-start-auto border-accent-1"
             } relative flex h-full flex-col content-start rounded-lg border-2 border-transparent bg-white p-2 px-4 shadow-lg hover:border-accent-1`}
             key={id}
+            onClick={() => {
+              setShowLoginModal(true);
+              setCurrentLink(link);
+            }}
           >
             {link.price === props.best_price && (
               <span className="font-bold text-accent-1">Best Price **</span>

@@ -2,21 +2,23 @@
 import Link from "next/link";
 import { useState } from "react";
 
-export default function Product({ product }) {
+export default function Product(props) {
+  const { product, key } = props;
   const [isFav, setIsFav] = useState(false);
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border-2 bg-secondary"
+      className="group flex flex-col overflow-hidden rounded-xl border-2 bg-white/50"
+      key={key}
     >
-      <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  bg-white">
+      <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-white">
         <img
           className="h-full w-full object-contain object-center transition-all duration-500 group-hover:scale-110 lg:h-full lg:w-full"
           src={product.image.href}
           alt=""
         />
       </div>
-      <div className="flex h-full flex-col justify-between gap-6 p-4">
+      <div className="flex h-full flex-col justify-between gap-6 p-4 ">
         <h1 className="text-xs font-medium transition-all duration-500 group-hover:text-complement md:text-sm">
           {product.name}
         </h1>

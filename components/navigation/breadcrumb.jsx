@@ -28,7 +28,7 @@ export default function Breadcrumb(props) {
               aria-hidden="true"
             ></i>
             <Link
-              href={props.subcat ? props.cat.href : "#"}
+              href={props.cat.href}
               className="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700 md:ml-4"
               aria-current={props.subcat ? "page" : undefined}
             >
@@ -44,9 +44,10 @@ export default function Breadcrumb(props) {
                 aria-hidden="true"
               ></i>
               <Link
-                href={props.product ? props.subcat.href : "#"}
+                href={props.subcat.href}
                 className="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700 md:ml-4"
                 aria-current={props.product ? "page" : undefined}
+                disabled={props.product ? false : true}
               >
                 {props.subcat.name}
               </Link>
@@ -61,7 +62,7 @@ export default function Breadcrumb(props) {
                 aria-hidden="true"
               ></i>
               <Link
-                href="#"
+                href={props.product.href}
                 className="ml-2 overflow-clip text-sm font-medium text-gray-500 hover:text-gray-700 md:ml-4"
                 aria-current={props.product ? "page" : undefined}
               >

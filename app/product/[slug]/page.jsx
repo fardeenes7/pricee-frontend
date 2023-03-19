@@ -6,7 +6,7 @@ import Suggestions from "./Suggestions";
 
 async function getData({ slug }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${process.env.NEXT_PUBLIC_API_VERSION}/products/${slug}`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -17,6 +17,7 @@ async function getData({ slug }) {
 
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
+  console.log(product.images);
   return {
     title: product.name + " | Pricee",
     openGraph: {
@@ -36,7 +37,6 @@ export async function generateMetadata({ params }) {
 export default async function Product({ params }) {
   const { slug } = params;
   const data = await getData({ slug });
-
   const cat = [
     {
       name: data.sub_category.category,
@@ -48,7 +48,7 @@ export default async function Product({ params }) {
     },
     {
       name: data.name,
-      href: "#",
+      href: `/product/${slug}`,
     },
   ];
 

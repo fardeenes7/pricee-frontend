@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function ImageDiv({ images }) {
   const [image, setImage] = useState(images[0].href);
@@ -12,17 +13,24 @@ export default function ImageDiv({ images }) {
             onClick={() => setImage(img.href)}
             key={id}
           >
-            <img src={img.href} className="h-full w-full"></img>
+            <Image
+              src={img.href}
+              height="128"
+              width="128"
+              className="h-full w-full"
+            ></Image>
           </div>
         ))}
       </div>
       <div className="aspect-square max-h-content col-span-4 rounded-xl border-2 bg-white p-8">
-        <img
+        <Image
           src={image}
           className="aspect-square h-full w-full object-contain object-center"
           animate={{ scale: 1.1 }}
           transition={{ duration: 0.5 }}
-        ></img>
+          height="1024"
+          width="1024"
+        ></Image>
       </div>
     </div>
   );
