@@ -1,9 +1,7 @@
-import Header from "../components/navigation/header";
-import Footer from "../components/navigation/footer";
 import "./globals.css";
 import localFont from "next/font/local";
+import Layout from "./homeLayout";
 
-// Font files can be colocated inside of `app`
 const walsheim = localFont({
   src: [
     {
@@ -31,20 +29,9 @@ const walsheim = localFont({
   display: "swap",
 });
 
-async function getData() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/navigation/`
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return res.json();
-}
-
-export default async function RootLayout({ children }) {
-  const data = await getData();
-
+export default async function RootLayout({ children, ...props }) {
+  console.log(props.router);
+  const isManage = ["/manage"].includes(props.pathname);
   return (
     <html lang="en" className={`${walsheim.variable}`}>
       <head>
@@ -54,13 +41,7 @@ export default async function RootLayout({ children }) {
           href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
         />
       </head>
-      <body className="flex min-h-screen flex-col bg-secondary selection:bg-accent-1 selection:text-white">
-        <Header navigation={data} />
-        <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">
-          {children}
-        </main>
-        <Footer />
-      </body>
+      <Layout children={children} />
     </html>
   );
 }

@@ -62,30 +62,30 @@ export default function DetailModal({ link, show, onClose, title }) {
                     height={100}
                     className="greyscale invert"
                   />
-                  <h1 className="text-2xl font-bold">{link.shop.name}</h1>
+                  <h1 className="text-xl font-bold">{link.shop.name}</h1>
                 </div>
                 <div className="mt-3 text-center sm:mt-5">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-md font-medium leading-6 text-gray-900"
                   >
                     {title}
                   </Dialog.Title>
                   <dl class="mt-4 grid grid-cols-1 gap-x-6 gap-y-0 px-8">
                     <div class="inline-flex items-center justify-start border-t border-gray-200 py-4">
-                      <dt class="w-32 text-start font-medium text-gray-900">
+                      <dt class="w-32 text-start text-sm font-medium text-gray-900">
                         Price
                       </dt>
                       <dd class="text-sm text-gray-500">{link.price} BDT</dd>
                     </div>
                     <div class="inline-flex items-center justify-start border-t border-gray-200 py-4">
-                      <dt class="w-32 text-start font-medium text-gray-900">
+                      <dt class="w-32 text-start text-sm font-medium text-gray-900">
                         Stock Status
                       </dt>
                       <dd class="text-sm text-gray-500">{link.status}</dd>
                     </div>
                     <div class="inline-flex items-center justify-start border-t border-gray-200 py-4">
-                      <dt class="w-32 text-start font-medium text-gray-900">
+                      <dt class="w-32 text-start text-sm font-medium text-gray-900">
                         Last Updated
                       </dt>
                       <dd class="text-sm text-gray-500">{link.last_updated}</dd>
@@ -93,17 +93,17 @@ export default function DetailModal({ link, show, onClose, title }) {
                   </dl>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+              <div className="mt-4 text-sm sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                 <button
                   type="button"
-                  className="inline-flex w-full justify-center rounded-md border border-transparent bg-accent-1 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-accent-2 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
+                  className="inline-flex w-full justify-center rounded-md border border-transparent bg-accent-1 px-4 py-2 font-medium text-white shadow-sm hover:bg-accent-2 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                   onClick={() => goToShop(link.href)}
                 >
                   Go to {link.shop.name}
                 </button>
                 <button
                   type="button"
-                  className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
+                  className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
                   onClick={() => onClose()}
                   ref={cancelButtonRef}
                 >

@@ -17,7 +17,6 @@ async function getData({ slug }) {
 
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
-  console.log(product.images);
   return {
     title: product.name + " | Pricee",
     openGraph: {

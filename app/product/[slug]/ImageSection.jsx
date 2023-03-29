@@ -9,7 +9,9 @@ export default function ImageDiv({ images }) {
       <div className="flex flex-col gap-2">
         {images.slice(0, 4).map((img, id) => (
           <div
-            className=" rounded-xl border-2 bg-white p-2"
+            className={` rounded-xl border-2 bg-white p-2 ${
+              image === img.href && "border-accent-1"
+            } `}
             onClick={() => setImage(img.href)}
             key={id}
           >
