@@ -30,8 +30,6 @@ const walsheim = localFont({
 });
 
 export default async function RootLayout({ children, ...props }) {
-  console.log(props.router);
-  const isManage = ["/manage"].includes(props.pathname);
   return (
     <html lang="en" className={`${walsheim.variable}`}>
       <head>

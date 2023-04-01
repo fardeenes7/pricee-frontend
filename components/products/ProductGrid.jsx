@@ -62,7 +62,9 @@ export default function ProductGrid(props) {
         {products.length != 0 && (
           <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
             {products.map((product, id) => (
-              <Product product={product} key={id} />
+              <div key={id}>
+                <Product product={product} id={id} />
+              </div>
             ))}
           </div>
         )}

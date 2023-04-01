@@ -1,14 +1,16 @@
 "use client";
 
 import "./nav.css";
-import React, { useState, useEffect, useRef, Fragment } from "react";
-import { Disclosure, Menu, Transition, Popover } from "@headlessui/react";
+import React, { useState, useEffect, Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
 import Image from "next/image";
 import LogoText from "../../public/priceetextlogo.svg";
 import Logo from "../../public/pricee.svg";
-
-import { CSSTransition } from "react-transition-group";
 import Link from "next/link";
+
+//Auth
+import { auth } from "../../firebase";
+import { data } from "autoprefixer";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -1197,70 +1199,78 @@ const navigation = {
   ],
 };
 
-export default function Header() {
+export default function Header({ setLoginModalOpen }) {
   const [open, setOpen] = useState(0);
-  const dropdownRef = useRef(null);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    window.onclick = (event) => {
-      if (
-        event.target.contains(dropdownRef.current) &&
-        event.target !== dropdownRef.current
-      ) {
-        setOpen(0);
-      }
-    };
+    getUserData();
   }, []);
+
+  const getUserData = async () => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          // If the response is not OK, try to refresh the access token
+          return fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ refresh: refreshToken }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              localStorage.setItem("access_token", data.access);
+              const newRequestOptions = {
+                headers: { Authorization: `Bearer ${data.access}` },
+              };
+              return fetch(url, newRequestOptions).then((response) =>
+                response.json()
+              );
+            });
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        setUser(data);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const logout = async () => {
+    const refresh_token = localStorage.getItem("refresh_token");
+    const access_token = localStorage.getItem("access_token");
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/logout`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh: refresh_token }),
+    }).then((response) => {
+      if (response.ok) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        setUser(null);
+      } else {
+        throw new Error("Something went wrong");
+      }
+    });
+  };
+
   return (
-    // <div>
-    //   <div className="sticky top-0 z-50 w-full bg-slate-100 px-4 shadow-lg">
-    //     <nav className="navbar mx-6 flex max-w-7xl items-center justify-between py-4 sm:items-center lg:mx-auto">
-    //       <div className="block lg:hidden">
-    //         <button>
-    //           <i className="fa-solid fa-bars"></i>
-    //         </button>
-    //       </div>
-    //       <div className="flex items-center justify-center">
-    //         <Link href="/" className="text-2xl font-bold">
-    //           pricee
-    //         </Link>
-    //         <div className="mx-6 hidden items-center gap-6 lg:flex">
-    //           <ul className="">
-    //             {/* <NavItem
-    //               open={open}
-    //               changeopen={() => (open === 1 ? setOpen(0) : setOpen(1))}
-    //               changeeclose={() => setOpen(0)}
-    //               icon="fa-solid fa-caret-down"
-    //               name="Categories"
-    //             >
-    //               <DropdownMenu
-    //                 dropdownRef={dropdownRef}
-    //                 changeopen={() => (open === 1 ? setOpen(0) : setOpen(1))}
-    //                 navigation={navigation}
-    //                 className=" overflow-scroll"
-    //               ></DropdownMenu>
-    //             </NavItem> */}
-    //           </ul>
-    //           {navigation.shops.map((shop, id) => (
-    //             <Link href={`/shop/${shop.name}`} className="text-sm" key={id}>
-    //               {shop.name}
-    //             </Link>
-    //           ))}
-    //         </div>
-    //       </div>
-    //       <div className="flex items-center">
-    //         <ul className="navbar-nav">
-    //           {loggedIn ? (
-    //             <div></div>
-    //           ) : (
-    //             <button className="rounded-md bg-accent-1 px-4 py-2 text-sm font-semibold text-secondary hover:bg-accent-2">
-    //               Login
-    //             </button>
-    //           )}
-    //         </ul>
-    //       </div>
-    //     </nav>
-    //   </div>
     <Disclosure as="nav" className="sticky top-0 z-10 bg-white shadow">
       {({ open }) => (
         <>
@@ -1341,14 +1351,15 @@ export default function Header() {
               </div>
               <div className="z-20 hidden lg:ml-4 lg:flex lg:items-center">
                 {/* Profile dropdown */}
-                {loggedIn ? (
+                {user && (
                   <Menu as="div" className="relative ml-4 flex-shrink-0">
                     <div>
                       <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2">
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          //src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${user.profile_pic}`}
                           alt=""
                         />
                       </Menu.Button>
@@ -1391,22 +1402,26 @@ export default function Header() {
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <button
+                              onClick={logout}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Sign out
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       </Menu.Items>
                     </Transition>
                   </Menu>
-                ) : (
-                  <button className="rounded-md bg-accent-1 px-4 py-2 text-xs font-semibold text-secondary hover:bg-accent-2">
+                )}
+                {!user && (
+                  <button
+                    onClick={setLoginModalOpen}
+                    className="rounded-md bg-accent-1 px-4 py-2 text-xs font-semibold text-secondary hover:bg-accent-2"
+                  >
                     Login
                   </button>
                 )}
@@ -1416,7 +1431,7 @@ export default function Header() {
           <div className="hidden bg-gray-50 lg:block">
             <div className="mx-auto flex w-full max-w-7xl justify-between px-2 text-sm  font-medium sm:px-4 lg:px-8">
               {navigation.categories.map((category) => (
-                <div key={category.slug} className="space-y-1 px-2 pt-2 pb-3">
+                <div key={category.slug} className="space-y-1 px-2 pb-3 pt-2">
                   <Menu as="div" className="relative flex-shrink-0">
                     <div>
                       <Menu.Button className="flex rounded-sm text-sm text-gray-700 hover:text-black focus:outline-none focus:ring-1 focus:ring-accent-1 focus:ring-offset-2">
@@ -1470,7 +1485,7 @@ export default function Header() {
           </div>
 
           <Disclosure.Panel className="lg:hidden">
-            <div className="space-y-1 pt-2 pb-3">
+            <div className="space-y-1 pb-3 pt-2">
               {/* Current: "bg-indigo-50 border-accent-1 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
               <Disclosure.Button
                 as="a"
@@ -1501,7 +1516,7 @@ export default function Header() {
                 Calendar
               </Disclosure.Button>
             </div>
-            <div className="border-t border-gray-200 pt-4 pb-3">
+            <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
                   <img
@@ -1512,10 +1527,10 @@ export default function Header() {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800">
-                    Tom Cook
+                    {user ? user.name : "Anonymous"}
                   </div>
                   <div className="text-sm font-medium text-gray-500">
-                    tom@example.com
+                    {user ? user.email : ""}
                   </div>
                 </div>
                 <button
@@ -1557,89 +1572,89 @@ export default function Header() {
   );
 }
 
-function NavItem({ name, categories, ...props }) {
-  return (
-    <Menu as="div" className="relative ml-4 flex-shrink-0">
-      <div>
-        <Menu.Button className="flex rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2">
-          <a className="px-4 py-1">
-            <span className="font mr-2 text-sm">{name}</span>
-            <i className={props.icon}></i>{" "}
-          </a>
-        </Menu.Button>
-      </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {categories.map((category) => (
-            <Menu.Item key={category.name}>
-              {({ active }) => (
-                <NavItem2
-                  icon="fa-solid fa-caret-down"
-                  name={category.name}
-                  category={category.slug}
-                  subcategories={category.sub_categories}
-                  className={classNames(
-                    active ? "bg-gray-100" : "",
-                    "block px-4 py-2 text-sm text-gray-700"
-                  )}
-                  active={active}
-                ></NavItem2>
-              )}
-            </Menu.Item>
-          ))}
-        </Menu.Items>
-      </Transition>
-    </Menu>
-  );
-}
-function NavItem2({ name, category, subcategories, ...props }) {
-  return (
-    <Menu as="div" className="relative ml-4 flex-shrink-0">
-      <div>
-        <Menu.Button
-          className={classNames(
-            props.active ? "bg-gray-100" : "",
-            "block px-4 py-2 text-sm text-gray-700"
-          )}
-        >
-          {name}
-        </Menu.Button>
-      </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute left-48 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {subcategories.map((subcategory) => (
-            <Menu.Item key={subcategory.name}>
-              {({ active }) => (
-                <Link
-                  href={`/category/${category}/${subcategory.slug}`}
-                  className={classNames(
-                    active ? "bg-gray-100" : "",
-                    "block px-4 py-2 text-sm text-gray-700"
-                  )}
-                >
-                  {subcategory.name}
-                </Link>
-              )}
-            </Menu.Item>
-          ))}
-        </Menu.Items>
-      </Transition>
-    </Menu>
-  );
-}
+// function NavItem({ name, categories, ...props }) {
+//   return (
+//     <Menu as="div" className="relative ml-4 flex-shrink-0">
+//       <div>
+//         <Menu.Button className="flex rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2">
+//           <a className="px-4 py-1">
+//             <span className="font mr-2 text-sm">{name}</span>
+//             <i className={props.icon}></i>{" "}
+//           </a>
+//         </Menu.Button>
+//       </div>
+//       <Transition
+//         as={Fragment}
+//         enter="transition ease-out duration-100"
+//         enterFrom="transform opacity-0 scale-95"
+//         enterTo="transform opacity-100 scale-100"
+//         leave="transition ease-in duration-75"
+//         leaveFrom="transform opacity-100 scale-100"
+//         leaveTo="transform opacity-0 scale-95"
+//       >
+//         <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+//           {categories.map((category) => (
+//             <Menu.Item key={category.name}>
+//               {({ active }) => (
+//                 <NavItem2
+//                   icon="fa-solid fa-caret-down"
+//                   name={category.name}
+//                   category={category.slug}
+//                   subcategories={category.sub_categories}
+//                   className={classNames(
+//                     active ? "bg-gray-100" : "",
+//                     "block px-4 py-2 text-sm text-gray-700"
+//                   )}
+//                   active={active}
+//                 ></NavItem2>
+//               )}
+//             </Menu.Item>
+//           ))}
+//         </Menu.Items>
+//       </Transition>
+//     </Menu>
+//   );
+// }
+// function NavItem2({ name, category, subcategories, ...props }) {
+//   return (
+//     <Menu as="div" className="relative ml-4 flex-shrink-0">
+//       <div>
+//         <Menu.Button
+//           className={classNames(
+//             props.active ? "bg-gray-100" : "",
+//             "block px-4 py-2 text-sm text-gray-700"
+//           )}
+//         >
+//           {name}
+//         </Menu.Button>
+//       </div>
+//       <Transition
+//         as={Fragment}
+//         enter="transition ease-out duration-100"
+//         enterFrom="transform opacity-0 scale-95"
+//         enterTo="transform opacity-100 scale-100"
+//         leave="transition ease-in duration-75"
+//         leaveFrom="transform opacity-100 scale-100"
+//         leaveTo="transform opacity-0 scale-95"
+//       >
+//         <Menu.Items className="absolute left-48 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+//           {subcategories.map((subcategory) => (
+//             <Menu.Item key={subcategory.name}>
+//               {({ active }) => (
+//                 <Link
+//                   href={`/category/${category}/${subcategory.slug}`}
+//                   className={classNames(
+//                     active ? "bg-gray-100" : "",
+//                     "block px-4 py-2 text-sm text-gray-700"
+//                   )}
+//                 >
+//                   {subcategory.name}
+//                 </Link>
+//               )}
+//             </Menu.Item>
+//           ))}
+//         </Menu.Items>
+//       </Transition>
+//     </Menu>
+//   );
+// }
