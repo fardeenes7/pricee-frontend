@@ -1197,9 +1197,7 @@ const navigation = {
 };
 
 export default function Header({ setLoginModalOpen }) {
-  const userDataString = window.sessionStorage.getItem("userData");
-  const userData = userDataString && JSON.parse(userDataString);
-  const [user, setUser] = useState(userData);
+  const [user, setUser] = useState(null);
 
   const logout = async () => {
     await Logout();
@@ -1207,6 +1205,9 @@ export default function Header({ setLoginModalOpen }) {
   };
 
   useEffect(() => {
+    const userDataString = window.sessionStorage.getItem("userData");
+    const userData = userDataString && JSON.parse(userDataString);
+    setUser(userData);
     const getUserData = async () => {
       const accessToken = localStorage.getItem("access_token");
       const refreshToken = localStorage.getItem("refresh_token");
@@ -1255,7 +1256,7 @@ export default function Header({ setLoginModalOpen }) {
           })
           .catch((error) => console.error(error));
       }
-    }
+    };
     if (user === null) {
       getUserData();
     }

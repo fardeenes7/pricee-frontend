@@ -13,12 +13,15 @@ import {
 } from "firebase/auth";
 import { auth } from "../../firebase";
 
-import { loginwithSocial } from "./auth";
+import { loginwithEmail, loginwithSocial } from "./auth";
 
 export default function LoginModal({ open, setOpen }) {
   // 0=login, 1=signup, 2=forgot password
   const [loginState, setLoginState] = useState(0);
   const googleProvider = new GoogleAuthProvider();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const googleLogin = async () => {
     try {
@@ -32,13 +35,21 @@ export default function LoginModal({ open, setOpen }) {
 
   const facebookProvider = new FacebookAuthProvider();
   const facebookLogin = async () => {
-    console.log("facebook login");
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       loginwithSocial(result.user.accessToken);
       setOpen;
     } catch (error) {
-      console.log(error);
+      setError(error.message);
+    }
+  };
+
+  const emailLogin = async () => {
+    try {
+      loginwithEmail(email, password);
+      setOpen;
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -161,6 +172,9 @@ export default function LoginModal({ open, setOpen }) {
                         id="email"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-1 focus:ring-accent-1 sm:text-sm"
                         placeholder="Enter your email address"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                        }}
                       />
                     </div>
                   </div>
@@ -178,6 +192,9 @@ export default function LoginModal({ open, setOpen }) {
                         id="password"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent-1 focus:ring-accent-1 sm:text-sm"
                         placeholder="Enter your password"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                        }}
                       />
                     </div>
                   </div>
@@ -197,7 +214,7 @@ export default function LoginModal({ open, setOpen }) {
                   </div>
                   <div className="mt-4">
                     <button
-                      type="submit"
+                      onClick={emailLogin}
                       className=" flex w-full justify-center rounded-md border border-transparent bg-accent-1 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-accent-2 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 active:scale-95"
                     >
                       Sign in
@@ -379,4 +396,3 @@ export default function LoginModal({ open, setOpen }) {
   );
 }
 
-function Login() {}
