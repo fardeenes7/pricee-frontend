@@ -1,5 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState } from "react";
+
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import FacebookIcon from "./facebook.svg";
@@ -12,24 +13,21 @@ import {
 } from "firebase/auth";
 import { auth } from "../../firebase";
 
-import { loginwithGoogle } from "./auth";
-
-//pass the accesstoken to log in using rest api
+import { loginwithSocial } from "./auth";
 
 export default function LoginModal({ open, setOpen }) {
   // 0=login, 1=signup, 2=forgot password
   const [loginState, setLoginState] = useState(0);
-
   const googleProvider = new GoogleAuthProvider();
+
   const googleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      loginwithGoogle(result.user.accessToken);
+      loginwithSocial(result.user.accessToken);
       setOpen;
     } catch (error) {
       console.log(error);
     }
-    setOpen();
   };
 
   const facebookProvider = new FacebookAuthProvider();
@@ -37,8 +35,8 @@ export default function LoginModal({ open, setOpen }) {
     console.log("facebook login");
     try {
       const result = await signInWithPopup(auth, facebookProvider);
-      console.log(result.user);
-      route.push("/dashboard");
+      loginwithSocial(result.user.accessToken);
+      setOpen;
     } catch (error) {
       console.log(error);
     }

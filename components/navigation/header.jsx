@@ -7,10 +7,7 @@ import Image from "next/image";
 import LogoText from "../../public/priceetextlogo.svg";
 import Logo from "../../public/pricee.svg";
 import Link from "next/link";
-
-//Auth
-import { auth } from "../../firebase";
-import { data } from "autoprefixer";
+import { Logout } from "../auth/auth";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -1200,75 +1197,69 @@ const navigation = {
 };
 
 export default function Header({ setLoginModalOpen }) {
-  const [open, setOpen] = useState(0);
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    getUserData();
-  }, []);
-
-  const getUserData = async () => {
-    const accessToken = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
-    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`;
-    fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          // If the response is not OK, try to refresh the access token
-          return fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ refresh: refreshToken }),
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              localStorage.setItem("access_token", data.access);
-              const newRequestOptions = {
-                headers: { Authorization: `Bearer ${data.access}` },
-              };
-              return fetch(url, newRequestOptions).then((response) =>
-                response.json()
-              );
-            });
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        setUser(data);
-      })
-      .catch((error) => console.error(error));
-  };
+  const userDataString = window.sessionStorage.getItem("userData");
+  const userData = userDataString && JSON.parse(userDataString);
+  const [user, setUser] = useState(userData);
 
   const logout = async () => {
-    const refresh_token = localStorage.getItem("refresh_token");
-    const access_token = localStorage.getItem("access_token");
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/logout`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refresh: refresh_token }),
-    }).then((response) => {
-      if (response.ok) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        setUser(null);
-      } else {
-        throw new Error("Something went wrong");
-      }
-    });
+    await Logout();
+    setUser(null);
   };
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+      if (accessToken && refreshToken) {
+        const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`;
+        fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              // If the response is not OK, try to refresh the access token
+              return fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ refresh: refreshToken }),
+                }
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  localStorage.setItem("access_token", data.access);
+                  const newRequestOptions = {
+                    headers: { Authorization: `Bearer ${data.access}` },
+                  };
+                  return fetch(url, newRequestOptions).then((response) =>
+                    response.json()
+                  );
+                });
+            }
+          })
+          .then((data) => {
+            if (data.email) {
+              setUser(data);
+              window.sessionStorage.setItem("userData", JSON.stringify(data));
+            } else {
+              setUser(null);
+              window.sessionStorage.removeItem("userData");
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+    }
+    if (user === null) {
+      getUserData();
+    }
+  }, []);
 
   return (
     <Disclosure as="nav" className="sticky top-0 z-10 bg-white shadow">
@@ -1406,7 +1397,7 @@ export default function Header({ setLoginModalOpen }) {
                               onClick={logout}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                "block w-full px-4 py-2 text-start text-sm text-gray-700"
                               )}
                             >
                               Sign out

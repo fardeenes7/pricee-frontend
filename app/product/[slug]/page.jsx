@@ -11,12 +11,12 @@ async function getData({ slug }) {
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
-
   return res.json();
 }
 
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
+  console.log(product.images[0].href);
   return {
     title: product.name + " | Pricee",
     openGraph: {
