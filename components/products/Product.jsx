@@ -6,11 +6,7 @@ export default function Product(props) {
   const { product, key } = props;
   const [isFav, setIsFav] = useState(false);
   return (
-    <Link
-      href={`/product/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border-2 bg-white/50"
-      key={props.id}
-    >
+    <>
       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white">
         <img
           className="h-full w-full object-contain object-center transition-all duration-500 group-hover:scale-110 lg:h-full lg:w-full"
@@ -38,6 +34,6 @@ export default function Product(props) {
           </div>
         </div>
       </div>
-    </Link>
+    </>
   );
 }

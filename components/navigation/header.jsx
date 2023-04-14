@@ -8,6 +8,8 @@ import LogoText from "../../public/priceetextlogo.svg";
 import Logo from "../../public/pricee.svg";
 import Link from "next/link";
 import { Logout } from "../auth/auth";
+import CategoryGrid from "../landing/CategoryGrid";
+import { getUser } from "../auth/getUser";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -1196,7 +1198,7 @@ const navigation = {
   ],
 };
 
-export default function Header({ setLoginModalOpen }) {
+export default function Header({ setLoginModalOpen, isProfilePage }) {
   const [user, setUser] = useState(null);
 
   const logout = async () => {
@@ -1205,60 +1207,14 @@ export default function Header({ setLoginModalOpen }) {
   };
 
   useEffect(() => {
-    const userDataString = window.sessionStorage.getItem("userData");
+    const userDataString = localStorage.getItem("userData");
     const userData = userDataString && JSON.parse(userDataString);
-    setUser(userData);
-    const getUserData = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      const refreshToken = localStorage.getItem("refresh_token");
-      if (accessToken && refreshToken) {
-        const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`;
-        fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              // If the response is not OK, try to refresh the access token
-              return fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ refresh: refreshToken }),
-                }
-              )
-                .then((response) => response.json())
-                .then((data) => {
-                  localStorage.setItem("access_token", data.access);
-                  const newRequestOptions = {
-                    headers: { Authorization: `Bearer ${data.access}` },
-                  };
-                  return fetch(url, newRequestOptions).then((response) =>
-                    response.json()
-                  );
-                });
-            }
-          })
-          .then((data) => {
-            if (data.email) {
-              setUser(data);
-              window.sessionStorage.setItem("userData", JSON.stringify(data));
-            } else {
-              setUser(null);
-              window.sessionStorage.removeItem("userData");
-            }
-          })
-          .catch((error) => console.error(error));
-      }
+    const fetchData = async () => {
+      const data = await getUser();
+      setUser(data);
     };
     if (user === null) {
-      getUserData();
+      fetchData();
     }
   }, []);
 
@@ -1310,7 +1266,7 @@ export default function Header({ setLoginModalOpen }) {
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                       <i
-                        class="fa-solid fa-magnifying-glass h-5 w-5 text-gray-400"
+                        className="fa-solid fa-magnifying-glass h-5 w-5 text-gray-400"
                         aria-hidden="true"
                       ></i>
                     </div>
@@ -1330,12 +1286,12 @@ export default function Header({ setLoginModalOpen }) {
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <i
-                      class="fa-solid fa-x block h-6 w-6"
+                      className="fa-solid fa-x block h-6 w-6"
                       aria-hidden="true"
                     ></i>
                   ) : (
                     <i
-                      class="fa-solid fa-bars block h-6 w-6"
+                      className="fa-solid fa-bars block h-6 w-6"
                       aria-hidden="true"
                     ></i>
                   )}
@@ -1368,15 +1324,15 @@ export default function Header({ setLoginModalOpen }) {
                       <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 font-medium shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <Link
+                              href="/profile"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Your Profile
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
@@ -1421,59 +1377,7 @@ export default function Header({ setLoginModalOpen }) {
             </div>
           </div>
           <div className="hidden bg-gray-50 lg:block">
-            <div className="mx-auto flex w-full max-w-7xl justify-between px-2 text-sm  font-medium sm:px-4 lg:px-8">
-              {navigation.categories.map((category) => (
-                <div key={category.slug} className="space-y-1 px-2 pb-3 pt-2">
-                  <Menu as="div" className="relative flex-shrink-0">
-                    <div>
-                      <Menu.Button className="flex rounded-sm text-sm text-gray-700 hover:text-black focus:outline-none focus:ring-1 focus:ring-accent-1 focus:ring-offset-2">
-                        <span className="px-1">{category.name}</span>
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              href={`/category/${category.slug}`}
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              All {category.name}
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        {category.sub_categories.map((subcategory) => (
-                          <Menu.Item key={category.name}>
-                            {({ active }) => (
-                              <Link
-                                href={`/category/${category.slug}/${subcategory.slug}`}
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {subcategory.name}
-                              </Link>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                </div>
-              ))}
-            </div>
+            {!isProfilePage && categoryMenu()}
           </div>
 
           <Disclosure.Panel className="lg:hidden">
@@ -1530,7 +1434,10 @@ export default function Header({ setLoginModalOpen }) {
                   className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2"
                 >
                   <span className="sr-only">View notifications</span>
-                  <i class="fa-solid fa-bell h-6 w-6" aria-hidden="true"></i>
+                  <i
+                    className="fa-solid fa-bell h-6 w-6"
+                    aria-hidden="true"
+                  ></i>
                 </button>
               </div>
               <div className="mt-3 space-y-1">
@@ -1650,3 +1557,61 @@ export default function Header({ setLoginModalOpen }) {
 //     </Menu>
 //   );
 // }
+
+function categoryMenu() {
+  return (
+    <div className="mx-auto flex w-full max-w-7xl justify-between px-2 text-sm  font-medium sm:px-4 lg:px-8">
+      {navigation.categories.map((category, id) => (
+        <div key={id} className="space-y-1 px-2 pb-3 pt-2">
+          <Menu as="div" className="relative flex-shrink-0">
+            <div>
+              <Menu.Button className="flex rounded-sm text-sm text-gray-700 hover:text-black focus:outline-none focus:ring-1 focus:ring-accent-1 focus:ring-offset-2">
+                <span className="px-1">{category.name}</span>
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      href={`/category/${category.slug}`}
+                      className={classNames(
+                        active ? "bg-gray-100" : "",
+                        "block px-4 py-2 text-sm text-gray-700"
+                      )}
+                    >
+                      All {category.name}
+                    </Link>
+                  )}
+                </Menu.Item>
+                {category.sub_categories.map((subcategory) => (
+                  <Menu.Item key={category.name}>
+                    {({ active }) => (
+                      <Link
+                        href={`/category/${category.slug}/${subcategory.slug}`}
+                        className={classNames(
+                          active ? "bg-gray-100" : "",
+                          "block px-4 py-2 text-sm text-gray-700"
+                        )}
+                      >
+                        {subcategory.name}
+                      </Link>
+                    )}
+                  </Menu.Item>
+                ))}
+              </Menu.Items>
+            </Transition>
+          </Menu>
+        </div>
+      ))}
+    </div>
+  );
+}

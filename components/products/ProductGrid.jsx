@@ -4,6 +4,7 @@ import Product from "../products/Product";
 import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "./ProductLoader";
+import Link from "next/link";
 
 export default function ProductGrid(props) {
   const [products, setProducts] = useState(
@@ -62,9 +63,13 @@ export default function ProductGrid(props) {
         {products.length != 0 && (
           <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
             {products.map((product, id) => (
-              <div key={id}>
+              <Link
+                href={`/product/${product.slug}`}
+                className="group flex flex-col overflow-hidden rounded-xl border-2 bg-white/50"
+                key={id}
+              >
                 <Product product={product} id={id} />
-              </div>
+              </Link>
             ))}
           </div>
         )}

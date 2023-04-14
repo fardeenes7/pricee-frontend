@@ -1,0 +1,7 @@
+@tailwind components;
+
+@layer components {
+  .card {
+    @apply rounded-lg bg-white p-4 shadow-lg;
+  }
+}

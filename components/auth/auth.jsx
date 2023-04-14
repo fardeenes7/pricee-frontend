@@ -1,46 +1,4 @@
-const getUserData = async () => {
-  const accessToken = localStorage.getItem("access_token");
-  const refreshToken = localStorage.getItem("refresh_token");
-  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`;
-  fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        // If the response is not OK, try to refresh the access token
-        return fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refresh: refreshToken }),
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            localStorage.setItem("access_token", data.access);
-            const newRequestOptions = {
-              headers: { Authorization: `Bearer ${data.access}` },
-            };
-            return fetch(url, newRequestOptions).then((response) =>
-              response.json()
-            );
-          });
-      }
-    })
-    .then((data) => {
-      // setUser(data);
-      console.log(data);
-      window.sessionStorage.setItem("userData", JSON.stringify(data));
-    })
-    .catch((error) => console.error(error));
-};
+import { getUser } from "./getUser";
 
 export async function loginwithSocial(accesstoken) {
   return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/social`, {
@@ -57,7 +15,7 @@ export async function loginwithSocial(accesstoken) {
       console.log(data);
       localStorage.setItem("access_token", data.tokens.access);
       localStorage.setItem("refresh_token", data.tokens.refresh);
-      getUserData();
+      getUser();
       window.location.reload();
     })
     .catch((err) => console.log(err));
@@ -78,7 +36,7 @@ export const Logout = async () => {
     if (response.ok) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      window.sessionStorage.removeItem("userData");
+      localStorage.removeItem("user");
     } else {
       // If the response is not OK, try to refresh the access token
       return fetch(
@@ -105,35 +63,13 @@ export const Logout = async () => {
             if (response.ok) {
               localStorage.removeItem("access_token");
               localStorage.removeItem("refresh_token");
-              window.sessionStorage.removeItem("userData");
+              localStorage.removeItem("user");
             }
           });
         });
     }
   });
 };
-
-export async function loginwithEmail(email, password) {
-  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      localStorage.setItem("access_token", data.tokens.access);
-      localStorage.setItem("refresh_token", data.tokens.refresh);
-      getUserData();
-      window.location.reload();
-    })
-    .catch((err) => console.log(err));
-}
 
 export async function registerwithEmail(email, password, name) {
   return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/register`, {
