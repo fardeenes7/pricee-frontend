@@ -37,6 +37,7 @@ export const Logout = async () => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("user");
+      window.location.reload();
     } else {
       // If the response is not OK, try to refresh the access token
       return fetch(
@@ -64,6 +65,7 @@ export const Logout = async () => {
               localStorage.removeItem("access_token");
               localStorage.removeItem("refresh_token");
               localStorage.removeItem("user");
+              window.location.reload();
             }
           });
         });
@@ -93,3 +95,73 @@ export async function registerwithEmail(email, password, name) {
     })
     .catch((err) => console.log(err));
 }
+
+export const updateUser = async (data) => {
+  if (typeof window === "undefined") return null;
+
+  const token = localStorage.getItem("access_token");
+  if (!token) return null;
+  console.log(data);
+
+  const formData = new FormData();
+  formData.append("name", data.name);
+  formData.append("email", data.email);
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile/update`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: formData,
+      }
+    );
+    const user = await res.json();
+    if (user.id) {
+      localStorage.setItem("user", JSON.stringify(user));
+      return user;
+    }
+  } catch (error) {
+    const refresh = localStorage.getItem("refresh_token");
+    if (!refresh) return null;
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refresh: refresh }),
+        }
+      );
+      const { access } = await res.json();
+      localStorage.setItem("access_token", access);
+
+      const res2 = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile/update`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${access}`,
+            "Content-Type": "application/json",
+          },
+          body: formData,
+        }
+      );
+      const user = await res2.json();
+      if (user.id) {
+        localStorage.setItem("user", JSON.stringify(user));
+        return user;
+      } else {
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+};

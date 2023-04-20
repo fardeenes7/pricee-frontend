@@ -45,27 +45,28 @@ const userMenu = [
   {
     name: "Profile",
     icon: "fa-user",
-    link: "/profile",
+    link: "/user/profile",
   },
   {
     name: "My Blog Posts",
     icon: "fa-blog",
-    link: "/profile/blog",
+    link: "/user/blog",
   },
   {
     name: "Settings",
     icon: "fa-gear",
-    link: "/profile/settings",
+    link: "/user/settings",
   },
   {
     name: "Logout",
     icon: "fa-right-from-bracket",
-    link: "/profile/logout",
+    link: "/user/logout",
   },
 ];
 
 function User(user, children) {
   const pathname = usePathname();
+  console.log(pathname);
   return (
     <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-5">
       <div className="relative">

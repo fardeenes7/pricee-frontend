@@ -1,0 +1,10 @@
+@tailwind components;
+
+@layer components {
+  .card {
+    @apply overflow-hidden rounded-lg bg-white p-4 shadow-lg;
+  }
+  .card-p-0 {
+    @apply overflow-hidden rounded-lg bg-white p-0 shadow-lg;
+  }
+}

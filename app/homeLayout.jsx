@@ -12,10 +12,10 @@ export default function Layout({ children }) {
   const pathname = usePathname();
 
   const isManage = pathname.startsWith("/manage");
-  const isProfile = pathname.startsWith("/profile");
+  const isProfile = pathname.startsWith("/user");
 
   if (isManage) {
-    return children;
+    return <body>{children}</body>;
   } else {
     return <HomeLayout children={children} isProfile={isProfile} />;
   }

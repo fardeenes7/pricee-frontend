@@ -30,14 +30,14 @@ export default function Profile() {
   } else
     return (
       <div>
-        <div className="card relative ">
+        <div className="card-p-0 relative">
           <div className="absolute bottom-0 right-0 m-4">
             <div className="flex flex-row gap-2">
-              <Link href="/profile/edit" className="btn ">
+              <Link href="/user/profile/edit" className="btn ">
                 Edit
               </Link>
               <Link
-                href="/profile/settings#delete"
+                href="/user/settings#delete_account"
                 className="btn bg-red-500 hover:bg-red-600 active:bg-red-600"
               >
                 Delete
@@ -45,7 +45,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="h-36 bg-gradient-to-r from-yellow-100 to-red-200"></div>
-          <div className="mx-6 -mt-16">
+          <div className="mx-6 -mt-16 mb-6">
             <div className=" flex h-36 w-36 flex-col  rounded-full border-4 border-white bg-white p-2">
               <img
                 className="h-36 w-36 rounded-full"

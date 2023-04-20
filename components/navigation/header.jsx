@@ -1245,13 +1245,13 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                     PC Builder
                   </Link>
                   <Link
-                    href="/"
+                    href="/user/collections"
                     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     Collections
                   </Link>
                   <Link
-                    href="/"
+                    href="/user/wishlist"
                     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     Wishlist
@@ -1325,7 +1325,7 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                         <Menu.Item>
                           {({ active }) => (
                             <Link
-                              href="/profile"
+                              href="/user/profile"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
@@ -1337,15 +1337,15 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <Link
+                              href="/user/settings"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Settings
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
