@@ -1,13 +1,13 @@
 "use client";
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
-import Logo from "@/public/pricee.svg";
 import TextLogo from "@/public/priceewhitetextlogo.svg";
 import { getUser } from "@/components/auth/getUser";
 import { checkPermission } from "@/components/manage/checkPermission";
 import { useRouter, usePathname } from "next/navigation";
 import Loading from "@/components/extras/Loading";
 import Image from "next/image";
+import Link from "next/link";
 
 const navigation = [
   {
@@ -34,7 +34,12 @@ const navigation = [
     icon: "fa solid fa-bell",
     current: false,
   },
-  { name: "Documents", href: "#", icon: "fa solid fa-bell", current: false },
+  {
+    name: "Documents",
+    href: "/manage/documents",
+    icon: "fa solid fa-bell",
+    current: false,
+  },
   {
     name: "Reports",
     href: "/manage/reports",
@@ -153,11 +158,14 @@ export default function ManageLayout({ children }) {
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
                     <nav className="space-y-1 px-2">
                       {navigation.map((item) => (
-                        <a
+                        <Link
                           key={item.name}
                           href={item.href}
                           className={classNames(
-                            item.href.startsWith(pathname)
+                            pathname === "/manage" && item.href === pathname
+                              ? "bg-gray-900 text-white"
+                              : pathname != "/manage" &&
+                                item.href.startsWith(pathname)
                               ? "bg-gray-900 text-white"
                               : "text-gray-300 hover:bg-gray-700 hover:text-white",
                             "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
@@ -173,7 +181,7 @@ export default function ManageLayout({ children }) {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </nav>
                   </div>
@@ -200,11 +208,20 @@ export default function ManageLayout({ children }) {
               <div className="flex flex-1 flex-col overflow-y-auto">
                 <nav className="flex-1 space-y-1 px-2 py-4">
                   {navigation.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
+                      // className={classNames(
+                      //   item.href.startsWith(pathname)
+                      //     ? "bg-gray-900 text-white"
+                      //     : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      //   "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
+                      // )}
                       className={classNames(
-                        item.current
+                        pathname === "/manage" && item.href === pathname
+                          ? "bg-gray-900 text-white"
+                          : pathname != "/manage" &&
+                            item.href.startsWith(pathname)
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
@@ -220,7 +237,7 @@ export default function ManageLayout({ children }) {
                         aria-hidden="true"
                       />
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </nav>
               </div>
@@ -259,13 +276,19 @@ export default function ManageLayout({ children }) {
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <span className="sr-only">Open user menu</span>
+                      <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 lg:rounded-md lg:px-2 lg:py-1 lg:hover:bg-gray-50">
                         <img
-                          className="h-8 w-8 rounded-full"
                           src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${user.profile_pic}`}
-                          // src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          className="h-6 w-6 rounded-full"
                           alt=""
+                        />
+                        <span className="ml-3 hidden text-sm font-bold text-gray-700 lg:block">
+                          <span className="sr-only">Open user menu for </span>
+                          {user.name ? user.name : user.username}
+                        </span>
+                        <i
+                          className="fa-solid fa-chevron-down ml-2 hidden flex-shrink-0 text-gray-400 lg:block"
+                          aria-hidden="true"
                         />
                       </Menu.Button>
                     </div>
@@ -282,15 +305,15 @@ export default function ManageLayout({ children }) {
                         {userNavigation.map((item) => (
                           <Menu.Item key={item.name}>
                             {({ active }) => (
-                              <a
+                              <Link
                                 href={item.href}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
+                                  "block px-4 py-2 text-sm font-medium text-gray-700"
                                 )}
                               >
                                 {item.name}
-                              </a>
+                              </Link>
                             )}
                           </Menu.Item>
                         ))}
@@ -303,12 +326,7 @@ export default function ManageLayout({ children }) {
 
             <main className="flex-1">
               <div className="py-6">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                  <h1 className="text-2xl font-semibold text-gray-900">
-                    Admin Dashboard
-                  </h1>
-                </div>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6">
                   {/* Replace with your content */}
                   {children}
                   {/* /End replace */}

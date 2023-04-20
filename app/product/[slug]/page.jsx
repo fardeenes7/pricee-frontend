@@ -1,12 +1,22 @@
+// import { useEffect } from "react";
 import Breadcrumb from "../../../components/navigation/breadcrumb";
 import ImageSection from "./ImageSection";
 import TitleSection from "./TitleSection";
 import InfoSection from "./InfoSection";
 import Suggestions from "./Suggestions";
+import RecordProductView from "./recordView";
+// import dynamic from "next/dynamic";
 
 async function getData({ slug }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 10 },
+    }
   );
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -17,6 +27,10 @@ async function getData({ slug }) {
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
   console.log(product.images[0].href);
+  // useEffect(() => {
+  //   recordProductView(product.id);
+  // }, []);
+
   return {
     title: product.name + " | Pricee",
     openGraph: {
@@ -32,6 +46,10 @@ export async function generateMetadata({ params }) {
     },
   };
 }
+
+// const recordProductView = dynamic(() => import("./recordView"), {
+//   ssr: false,
+// });
 
 export default async function Product({ params }) {
   const { slug } = params;
@@ -53,6 +71,7 @@ export default async function Product({ params }) {
 
   return (
     <div className="flex flex-col gap-4">
+      <RecordProductView id={data.id} />
       <Breadcrumb cat={cat[0]} subcat={cat[1]} product={cat[2]} />
       <div className="grid gap-4 md:grid-cols-4">
         <div className="md:col-span-2">
