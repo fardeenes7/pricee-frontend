@@ -1,3 +1,5 @@
+//client for testing. this line should be removed in production
+"use client";
 import Link from "next/link";
 import BannerGrid from "components/landing/bannergrid";
 import CategoryGrid from "@/components/landing/CategoryGrid";
