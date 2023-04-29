@@ -1,19 +1,44 @@
 "use client";
 import { useEffect } from "react";
+import { refreshToken } from "@/components/auth/auth";
+
+export async function recordProductViewWithoutToken(id) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/record_view/${id}/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    if (res.status != 200) {
+      console.log(res.status);
+      throw new Error("Error");
+    }
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
 
 export default function RecordProductView(props) {
   const id = props.id;
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    if (!token) return null;
+    if (!token) {
+      recordProductViewWithoutToken(id);
+      return;
+    }
     const record = async () => {
       console.log("recording");
-
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/record_view/${id}/`,
           {
-            method: "GET",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
@@ -22,40 +47,13 @@ export default function RecordProductView(props) {
           }
         );
         if (res.status != 200) {
-          // raise error
+          console.log(res.status);
+          throw new Error("Error");
         }
       } catch (error) {
-        const refresh = localStorage.getItem("refresh_token");
-        if (!refresh) return null;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ refresh: refresh }),
-            }
-          );
-          const { access } = await res.json();
-          localStorage.setItem("access_token", access);
-
-          const res2 = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/record_view/${id}/`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${access}`,
-              },
-              next: { revalidate: 300 },
-            }
-          );
-          return null;
-        } catch (error) {
-          return null;
-        }
+        console.log(error);
+        refreshToken();
+        RecordProductView(props);
       }
     };
     record();

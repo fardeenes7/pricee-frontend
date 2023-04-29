@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Product(props) {
@@ -7,11 +7,16 @@ export default function Product(props) {
   const [isFav, setIsFav] = useState(false);
   return (
     <>
-      <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white">
-        <img
+      <div className="aspect-h-1 aspect-w-1 relative w-full overflow-hidden rounded-md bg-white">
+        <Image
           className="h-full w-full object-contain object-center transition-all duration-500 group-hover:scale-110 lg:h-full lg:w-full"
           src={product.image.href}
           alt=""
+          loading="lazy"
+          fill
+          // loader={({ src }) => src}
+          placeholder="blur"
+          blurDataURL={product.image.href}
         />
       </div>
       <div className="flex h-full flex-col justify-between gap-6 p-4 ">

@@ -70,8 +70,6 @@ export default function ManageLayout({ children }) {
       const staff = await checkPermission();
       if (staff) {
         setIsStaff(staff);
-      } else {
-        router.push("/user/profile");
       }
     };
     const fetchData = async () => {

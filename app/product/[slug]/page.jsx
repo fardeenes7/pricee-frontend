@@ -26,10 +26,6 @@ async function getData({ slug }) {
 
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
-  console.log(product.images[0].href);
-  // useEffect(() => {
-  //   recordProductView(product.id);
-  // }, []);
 
   return {
     title: product.name + " | Pricee",
