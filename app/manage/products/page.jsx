@@ -2,7 +2,8 @@ import Pagination from "@/components/pagination/pagination";
 
 async function getData(page) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_MANAGE_URL}/products?page=${page}`
+    `${process.env.NEXT_PUBLIC_API_MANAGE_URL}/products?page=${page}`,
+    { cache: "no-store" }
   );
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -17,7 +18,7 @@ export default async function Products({ searchParams }) {
   const totalPages = Math.ceil(data.count / 10);
 
   return (
-    <div className="">
+    <div className="overflow-hidden">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900">Products</h1>
@@ -41,6 +42,12 @@ export default async function Products({ searchParams }) {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th
+                      scope="col"
+                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    >
+                      ID
+                    </th>
                     <th
                       scope="col"
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
@@ -70,6 +77,9 @@ export default async function Products({ searchParams }) {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {data.results.map((product) => (
                     <tr key={product.name}>
+                      <td className="pl-4 pr-3 font-bold text-gray-900">
+                        <span className="text-xs">{product.id}</span>
+                      </td>
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-6">
                         <div className="flex items-center">
                           <div className="h-8 w-8 flex-shrink-0">
@@ -79,9 +89,9 @@ export default async function Products({ searchParams }) {
                               alt=""
                             />
                           </div>
-                          <div className="ml-4">
+                          <div className="ml-4 max-w-md md:max-w-xl lg:max-w-3xl">
                             <div className="font-medium text-gray-900">
-                              {product.name}
+                              <p className="truncate">{product.name}</p>
                             </div>
                           </div>
                         </div>
@@ -107,11 +117,7 @@ export default async function Products({ searchParams }) {
                 </tbody>
               </table>
             </div>
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              baseUrl={"/manage/products"}
-            />
+            <Pagination currentPage={page} totalPages={totalPages} />
           </div>
         </div>
       </div>

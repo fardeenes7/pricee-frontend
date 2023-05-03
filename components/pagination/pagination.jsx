@@ -1,13 +1,16 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function classnames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Pagination = ({ currentPage, totalPages, baseUrl }) => {
+const Pagination = ({ currentPage, totalPages }) => {
+  const baseUrl = usePathname();
   const [page, setPage] = useState(currentPage);
+  const [goToPage, setGoToPage] = useState(page);
   const range = 2;
   const pages = [];
 
@@ -22,90 +25,124 @@ const Pagination = ({ currentPage, totalPages, baseUrl }) => {
   const isFirstPage = page === 1;
   const isLastPage = page === totalPages;
 
-  const prevPage = page - 1;
-  const nextPage = page + 1;
+  const prevPage = page === 1 ? 1 : page - 1;
+  const nextPage = page === totalPages ? totalPages : page + 1;
+
+  const activePage = "z-10 bg-indigo-50 border-indigo-500 text-indigo-600";
+  const defaultPage = "bg-white border-gray-300 text-gray-500 hover:bg-gray-50";
 
   return (
-    <div className="mt-4 flex justify-center">
-      <nav className="block">
-        <ul className="flex list-none flex-wrap rounded pl-0">
-          {!isFirstPage && (
-            <li>
-              <Link
-                href={`${baseUrl}?page=${prevPage}`}
-                className="rounded-l-lg border-l border-t border-gray-300 bg-gray-200 px-3 py-2 hover:bg-gray-300"
-              >
-                Prev
-              </Link>
-            </li>
-          )}
+    <div className="flex items-center justify-between border-t border-gray-200 bg-white py-3">
+      <div className="flex flex-1 justify-between sm:hidden">
+        <Link
+          href={`${baseUrl}?page=${prevPage}`}
+          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Previous
+        </Link>
+        <Link
+          href={`${baseUrl}?page=${nextPage}`}
+          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Next
+        </Link>
+      </div>
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-sm text-gray-700">Jump to page </span>
+          <div className="mt-1 flex rounded-md shadow-sm">
+            <div className="relative flex flex-grow items-stretch focus-within:z-10">
+              <input
+                type="number"
+                className="block w-full rounded-none rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                min={1}
+                max={totalPages}
+                onChange={(e) => setGoToPage(e.target.value)}
+                placeholder={page}
+              />
+            </div>
+            <button
+              type="button"
+              className="relative -ml-px inline-flex items-center space-x-2 rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            >
+              <Link href={`${baseUrl}?page=${goToPage}`}>Go</Link>
+            </button>
+          </div>
+        </div>
+        <div>
+          <nav
+            className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm"
+            aria-label="Pagination"
+          >
+            <Link
+              href={`${baseUrl}?page=${prevPage}`}
+              className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              <span className="">Previous</span>
+            </Link>
+            {/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
 
-          {page > range + 1 && (
-            <>
-              <li>
+            {page > range - 2 && (
+              <>
                 <Link
                   href={`${baseUrl}?page=1`}
-                  className="border-l border-t border-gray-300 bg-gray-200 px-3 py-2 hover:bg-gray-300"
+                  className={classnames(
+                    "relative inline-flex items-center border px-4 py-2 text-sm font-medium",
+                    page === 1 ? activePage : defaultPage
+                  )}
                 >
                   1
                 </Link>
-              </li>
-              {page > range + 2 && (
-                <li>
-                  <span className="border-l border-t border-gray-300 px-3 py-2">
-                    ...
-                  </span>
-                </li>
-              )}
-            </>
-          )}
-
-          {pages.map((pageNumber) => (
-            <li key={pageNumber}>
+                {page > range + 2 && (
+                  <a disabled>
+                    <span className="relative inline-flex items-center border px-4 py-2 text-sm font-medium">
+                      ...
+                    </span>
+                  </a>
+                )}
+              </>
+            )}
+            {pages.map((pageNumber) => (
               <Link
                 href={`${baseUrl}?page=${pageNumber}`}
                 className={classnames(
-                  "border-l border-t border-gray-300 px-3 py-2",
-                  {
-                    "bg-blue-500 font-bold text-white": pageNumber === page,
-                    "hover:bg-blue-500 hover:text-white": pageNumber !== page,
-                  }
+                  "relative inline-flex items-center border px-4 py-2 text-sm font-medium",
+                  page === pageNumber ? activePage : defaultPage
                 )}
+                key={pageNumber}
               >
                 {pageNumber}
               </Link>
-            </li>
-          ))}
+            ))}
 
-          {page < totalPages - range && (
-            <>
-              {page < totalPages - range - 1 && (
-                <li>
-                  <span className="border-l border-t border-gray-300 px-3 py-2">
+            {page < totalPages - range + 3 && (
+              <>
+                {page < totalPages - range - 2 && (
+                  <span className="relative inline-flex items-center border px-4 py-2 text-sm font-medium">
                     ...
                   </span>
-                </li>
-              )}
-              <li>
+                )}
                 <Link
                   href={`${baseUrl}?page=${totalPages}`}
-                  className="border-l border-t border-gray-300 bg-gray-200 px-3 py-2 hover:bg-gray-300"
+                  className={classnames(
+                    "relative inline-flex items-center border px-4 py-2 text-sm font-medium",
+                    page === totalPages ? activePage : defaultPage
+                  )}
                 >
                   {totalPages}
                 </Link>
-              </li>
-            </>
-          )}
+              </>
+            )}
 
-          {!isLastPage && (
-            <li>
-              <Link href={`${baseUrl}?page=${nextPage}`} className="rounded-r-lg border-l border-t border-gray-300 bg-gray-200 px-3 py-2 hover:bg-gray-300">
-                  Next
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
+            <Link
+              href={`${baseUrl}?page=${nextPage}`}
+              className="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              <span className="">Next</span>
+            </Link>
+          </nav>
+        </div>
+      </div>
     </div>
   );
 };

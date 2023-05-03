@@ -47,11 +47,6 @@ const navigation = [
     current: false,
   },
 ];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -64,6 +59,11 @@ export default function ManageLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [is_staff, setIsStaff] = useState(false);
+  let userNavigation = [
+    { name: "Your Profile", href: "#" },
+    { name: "Settings", href: "#" },
+    { name: "Sign out", href: "#" },
+  ];
 
   useEffect(() => {
     const check_permission = async () => {
@@ -88,6 +88,7 @@ export default function ManageLayout({ children }) {
       }
       setLoading(false);
     }
+    userNavigation[0].href = "/manage/users/" + user?.id;
   }, [is_staff]);
 
   if (loading) {
