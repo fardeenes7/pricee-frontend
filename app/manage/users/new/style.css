@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  input {
+    @apply border-gray-300;
+  }
+  input:invalid {
+    @apply border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500;
+  }
+
+  input:valid {
+    @apply focus:border-complement focus:ring-complement;
+  }
+  input:placeholder-shown {
+    @apply focus:border-complement focus:ring-complement;
+  }
+
+  input:valid ~ span {
+    @apply hidden;
+  }
+
+  input:placeholder-shown ~ span {
+    @apply hidden;
+  }
+
+  input:invalid[focused="true"] ~ span {
+    @apply block;
+  }
+}

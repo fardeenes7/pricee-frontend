@@ -3,13 +3,15 @@
 import { useState } from "react";
 import DeleteModal from "./modal";
 
-export default function DeleteUser() {
+export default function DeleteUser({ params }) {
+  const id = params.id;
   const [showModal, setShowModal] = useState(false);
   return (
     <>
       <DeleteModal
         showModal={showModal}
         setShowModal={() => setShowModal(false)}
+        id={id}
       />
       <div className="my-4 bg-white shadow sm:rounded-lg lg:mx-8">
         <div className="px-4 py-5 sm:p-6">

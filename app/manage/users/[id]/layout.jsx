@@ -89,7 +89,7 @@ export default async function UserLayout({ params, children }) {
         </div>
 
         {/* Tabs */}
-        <Tabs id={profile.id} />
+        <Tabs id={data.id} />
         {children}
       </article>
     </div>
