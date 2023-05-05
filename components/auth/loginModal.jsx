@@ -1,6 +1,4 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState, useEffect } from "react";
-
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import FacebookIcon from "./facebook.svg";

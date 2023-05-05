@@ -7,7 +7,6 @@ import ForgotPasswordModal from "../components/auth/forgotPasswordModal";
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-
 export default function Layout({ children }) {
   const pathname = usePathname();
 

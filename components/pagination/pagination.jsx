@@ -115,7 +115,7 @@ const Pagination = ({ currentPage, totalPages }) => {
               </Link>
             ))}
 
-            {page < totalPages - range + 3 && (
+            {page < totalPages - range + 3 && totalPages != 1 && (
               <>
                 {page < totalPages - range - 2 && (
                   <span className="relative inline-flex items-center border px-4 py-2 text-sm font-medium">

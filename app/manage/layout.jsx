@@ -9,6 +9,8 @@ import Loading from "@/components/extras/Loading";
 import Image from "next/image";
 import Link from "next/link";
 
+import NextNProgress from "nextjs-progressbar";
+
 const navigation = [
   {
     name: "Dashboard",
@@ -60,7 +62,7 @@ export default function ManageLayout({ children }) {
   const [user, setUser] = useState(null);
   const [is_staff, setIsStaff] = useState(false);
   let userNavigation = [
-    { name: "Your Profile", href: "#" },
+    { name: "Your Profile", href: "/manage/users" },
     { name: "Settings", href: "#" },
     { name: "Sign out", href: "#" },
   ];
@@ -100,6 +102,9 @@ export default function ManageLayout({ children }) {
   } else {
     return (
       <>
+        <div className="fixed top-0 z-50 w-full">
+          <NextNProgress />
+        </div>
         <div>
           <Transition.Root show={sidebarOpen} as={Fragment}>
             <Dialog
@@ -161,10 +166,10 @@ export default function ManageLayout({ children }) {
                           key={item.name}
                           href={item.href}
                           className={classNames(
-                            pathname === "/manage" && item.href === pathname
+                            item.href === "/manage" && pathname === "/manage"
                               ? "bg-gray-900 text-white"
-                              : pathname != "/manage" &&
-                                item.href.startsWith(pathname)
+                              : (item.href != "/manage") ===
+                                pathname.startsWith(item.href)
                               ? "bg-gray-900 text-white"
                               : "text-gray-300 hover:bg-gray-700 hover:text-white",
                             "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
@@ -172,7 +177,7 @@ export default function ManageLayout({ children }) {
                         >
                           <i
                             className={classNames(
-                              item.href.startsWith(pathname)
+                              pathname.startsWith(item.href)
                                 ? "text-gray-300"
                                 : "text-gray-400 group-hover:text-gray-300",
                               `ml-2 mr-3 flex-shrink-0 ${item.icon}`
@@ -210,17 +215,11 @@ export default function ManageLayout({ children }) {
                     <Link
                       key={item.name}
                       href={item.href}
-                      // className={classNames(
-                      //   item.href.startsWith(pathname)
-                      //     ? "bg-gray-900 text-white"
-                      //     : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      //   "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
-                      // )}
                       className={classNames(
-                        pathname === "/manage" && item.href === pathname
+                        item.href === "/manage" && pathname === "/manage"
                           ? "bg-gray-900 text-white"
-                          : pathname != "/manage" &&
-                            item.href.startsWith(pathname)
+                          : (item.href != "/manage") ===
+                            pathname.startsWith(item.href)
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
@@ -228,7 +227,7 @@ export default function ManageLayout({ children }) {
                     >
                       <i
                         className={classNames(
-                          item.href.startsWith(pathname)
+                          pathname.startsWith(item.href)
                             ? "text-gray-300"
                             : "text-gray-400 group-hover:text-gray-300",
                           `ml-2 mr-3 flex-shrink-0 ${item.icon} text-sm`
