@@ -1,15 +1,22 @@
 import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/outline";
 import Image from "next/image";
+import RecordLinkClick from "./recordLinkClick";
 
-function goToShop(url) {
+// function goToShop(url) {
+//   console.log(url);
+//   window.open(url, "_blank");
+// }
+
+function goToShop(url, id) {
+  RecordLinkClick({ id });
   console.log(url);
   window.open(url, "_blank");
 }
 
 export default function DetailModal({ link, show, onClose, title }) {
   const cancelButtonRef = useRef(null);
+  console.log(link);
 
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -19,7 +26,7 @@ export default function DetailModal({ link, show, onClose, title }) {
         initialFocus={cancelButtonRef}
         onClose={onClose}
       >
-        <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -31,7 +38,6 @@ export default function DetailModal({ link, show, onClose, title }) {
           >
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
-
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:h-screen sm:align-middle"
@@ -48,7 +54,7 @@ export default function DetailModal({ link, show, onClose, title }) {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
+            <div className="relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
               <div>
                 <div className="mx-auto flex w-full items-center justify-between p-4">
                   {/* <CheckIcon
@@ -97,7 +103,7 @@ export default function DetailModal({ link, show, onClose, title }) {
                 <button
                   type="button"
                   className="inline-flex w-full justify-center rounded-md border border-transparent bg-accent-1 px-4 py-2 font-medium text-white shadow-sm hover:bg-accent-2 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-                  onClick={() => goToShop(link.href)}
+                  onClick={() => goToShop(link.href, link.id)}
                 >
                   Go to {link.shop.name}
                 </button>
@@ -111,7 +117,7 @@ export default function DetailModal({ link, show, onClose, title }) {
                 </button>
               </div>
             </div>
-          </Transition.Child>
+          </Transition.Child>{" "}
         </div>
       </Dialog>
     </Transition.Root>
