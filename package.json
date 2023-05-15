@@ -21,6 +21,8 @@
     "eslint-config-next": "^13.2.1",
     "firebase": "^9.18.0",
     "framer-motion": "^9.0.7",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.28",
     "next": "^13.4.1",
     "nextjs-progressbar": "^0.0.16",
     "postcss": "8.4.23",

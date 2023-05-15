@@ -43,10 +43,6 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// const recordProductView = dynamic(() => import("./recordView"), {
-//   ssr: false,
-// });
-
 export default async function Product({ params }) {
   const { slug } = params;
   const data = await getData({ slug });

@@ -3,20 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import RecordLinkClick from "./recordLinkClick";
 
-// function goToShop(url) {
-//   console.log(url);
-//   window.open(url, "_blank");
-// }
-
 function goToShop(url, id) {
   RecordLinkClick({ id });
-  console.log(url);
   window.open(url, "_blank");
 }
 
 export default function DetailModal({ link, show, onClose, title }) {
   const cancelButtonRef = useRef(null);
-  console.log(link);
 
   return (
     <Transition.Root show={show} as={Fragment}>

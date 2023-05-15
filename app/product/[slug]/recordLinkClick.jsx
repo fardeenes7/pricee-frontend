@@ -1,5 +1,3 @@
-"use client";
-import { useEffect, useState } from "react";
 import { refreshToken } from "@/components/auth/auth";
 
 export async function recordLinkClickWithoutToken(id) {
@@ -15,11 +13,9 @@ export async function recordLinkClickWithoutToken(id) {
       }
     );
     if (res.status != 200) {
-      console.log(res.status);
       throw new Error("Error");
     }
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -45,7 +41,6 @@ export async function recordLinkClickWithToken(id) {
       return null;
     }
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
