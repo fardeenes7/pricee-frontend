@@ -17,6 +17,7 @@ export default function Product(props) {
           // loader={({ src }) => src}
           placeholder="blur"
           blurDataURL={product.image.href}
+          sizes="100vw"
         />
       </div>
       <div className="flex h-full flex-col justify-between gap-6 p-4 ">
