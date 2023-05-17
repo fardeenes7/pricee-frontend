@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Modal from "./modal";
 export default function NewUser() {
+  const router = useRouter();
   const [imageUrl, setImageUrl] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function NewUser() {
     name: "",
     email: "",
     username: "",
-    profile_pic: null,
+    // profile_pic: null,
     is_superuser: false,
     account_type: "user",
     password: "",
@@ -32,11 +33,13 @@ export default function NewUser() {
   });
 
   const handleFileChange = (e) => {
+    // console.log(e.target.files);
     const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      [e.target.name]: file,
-    });
+    // console.log(e.target.files[0]);
+    // setFormData({
+    //   ...formData,
+    //   [e.target.name]: file,
+    // });
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -51,17 +54,20 @@ export default function NewUser() {
       `${process.env.NEXT_PUBLIC_API_MANAGE_URL}/users/new`,
       {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
       }
     );
     const data = await res.json();
-    if (res.status != 201) {
+    if (res.status == 200) {
+      console.log(data);
       setLoading(false);
-      setShowModal(true);
-      alert(data.message);
+      router.push(`/manage/users/${data.id}`);
     } else {
       setLoading(false);
-      alert(data.message);
+      setShowModal(true);
       // alert("User created successfully");
     }
   };
