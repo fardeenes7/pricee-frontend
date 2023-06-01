@@ -11,6 +11,7 @@ import { Logout } from "../auth/auth";
 import CategoryGrid from "../landing/CategoryGrid";
 import { getUser } from "../auth/getUser";
 import Search from "../search/Search";
+import { refreshToken } from "../auth/auth";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -1216,6 +1217,11 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
     if (user === null) {
       fetchData();
     }
+    const token = localStorage.getItem("refresh_token");
+    const interval = setInterval(() => {
+      if (token) refreshToken();
+    }, 58 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (

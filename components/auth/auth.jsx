@@ -17,6 +17,10 @@ export async function refreshToken() {
     const { access } = await res.json();
     localStorage.setItem("access_token", access);
   } catch (error) {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user");
+    window.location.reload();
     return null;
   }
 }
