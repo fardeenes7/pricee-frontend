@@ -1201,7 +1201,6 @@ const navigation = {
 
 export default function Header({ setLoginModalOpen, isProfilePage }) {
   const [user, setUser] = useState(null);
-
   const logout = async () => {
     await Logout();
     setUser(null);
