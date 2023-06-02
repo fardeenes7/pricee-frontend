@@ -21,7 +21,7 @@ async function getData() {
       size: "3x1",
     },
     {
-      image: "https://i.imgur.com/ld7QCZ9.png",
+      image: "https://i.imgur.com/OhSEFWs.png",
       title: "10 Best Laptops Blog",
       slug: "10-best-laptops-blog",
       size: "1x1",
@@ -44,7 +44,7 @@ export default async function BannerGrid() {
           }`}
         >
           <img
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
             src={banner.image}
             alt={banner.title}
           />
