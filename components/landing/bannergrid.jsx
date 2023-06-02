@@ -1,3 +1,7 @@
+import Image from "next/image";
+import One from "./one.webp";
+import Two from "./two.webp";
+
 async function getData() {
   // const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/banners`, {
   //   headers: {
@@ -15,13 +19,13 @@ async function getData() {
 
   const res = [
     {
-      image: "https://i.imgur.com/1KC78BK.png",
+      image: Two,
       title: "Yellow Minimalist Banner",
       slug: "yellow-minimalist-banner",
       size: "3x1",
     },
     {
-      image: "https://i.imgur.com/OhSEFWs.png",
+      image: One,
       title: "10 Best Laptops Blog",
       slug: "10-best-laptops-blog",
       size: "1x1",
@@ -43,10 +47,11 @@ export default async function BannerGrid() {
               : "aspect-square col-span-3 row-span-1 md:col-span-1"
           }`}
         >
-          <img
+          <Image
             className="h-full w-full object-contain"
             src={banner.image}
             alt={banner.title}
+            priority={true}
           />
         </div>
       ))}
