@@ -32,10 +32,6 @@ const navigation = {
           slug: "sound-card",
         },
         {
-          name: "Vention",
-          slug: "vention",
-        },
-        {
           name: "USB HUB",
           slug: "usb-hub",
         },
@@ -48,24 +44,12 @@ const navigation = {
           slug: "presenter",
         },
         {
-          name: "Combo",
-          slug: "combo",
-        },
-        {
           name: "Capture Card",
           slug: "capture-card",
         },
         {
           name: "Portable Speaker",
           slug: "portable-speaker",
-        },
-        {
-          name: "Bluetooth",
-          slug: "bluetooth",
-        },
-        {
-          name: "Apple Pencil",
-          slug: "apple-pencil",
         },
         {
           name: "Wifi-Adapter",
@@ -76,84 +60,20 @@ const navigation = {
           slug: "power-bank",
         },
         {
-          name: "Media Converter",
-          slug: "media-converter",
-        },
-        {
-          name: "Floor Mat",
-          slug: "floor-mat",
-        },
-        {
-          name: "Console Converter",
-          slug: "console-converter",
-        },
-        {
           name: "Cable & convertor",
           slug: "cable-convertor",
-        },
-        {
-          name: "Mouse pad",
-          slug: "mouse-pad",
-        },
-        {
-          name: "Neckband",
-          slug: "neckband",
-        },
-        {
-          name: "Keyboard",
-          slug: "keyboard",
-        },
-        {
-          name: "Converter & Cable",
-          slug: "converter-cable",
         },
         {
           name: "Headphone",
           slug: "headphone",
         },
         {
-          name: "Gamepad",
-          slug: "gamepad",
-        },
-        {
           name: "Backpack",
           slug: "backpack",
         },
         {
-          name: "Calculator",
-          slug: "calculator",
-        },
-        {
-          name: "LED Strip",
-          slug: "led-strip",
-        },
-        {
-          name: "Smart Band",
-          slug: "smart-band",
-        },
-        {
           name: "Drones",
           slug: "drones",
-        },
-        {
-          name: "Studio Equipment",
-          slug: "studio-equipment",
-        },
-        {
-          name: "Earbuds",
-          slug: "earbuds",
-        },
-        {
-          name: "Stream Deck",
-          slug: "stream-deck",
-        },
-        {
-          name: "Wrist Pad",
-          slug: "wrist-pad",
-        },
-        {
-          name: "Keyboard Keycaps",
-          slug: "keyboard-keycaps",
         },
         {
           name: "Microphone",
@@ -171,10 +91,7 @@ const navigation = {
           name: "Speakers",
           slug: "speakers",
         },
-        {
-          name: "Targus",
-          slug: "targus",
-        },
+
         {
           name: "Mouse Pad",
           slug: "mouse-pad",
@@ -188,14 +105,6 @@ const navigation = {
           slug: "mouse",
         },
         {
-          name: "Exclusive",
-          slug: "exclusive",
-        },
-        {
-          name: "Splitter",
-          slug: "splitter",
-        },
-        {
           name: "Sewing Machine",
           slug: "sewing-machine",
         },
@@ -204,72 +113,16 @@ const navigation = {
           slug: "smart-watch",
         },
         {
-          name: "Vivanco",
-          slug: "vivanco",
-        },
-        {
-          name: "Qgeem",
-          slug: "qgeem",
-        },
-        {
-          name: "Blower",
-          slug: "blower",
-        },
-        {
           name: "Daily Lifestyle",
           slug: "daily-lifestyle",
-        },
-        {
-          name: "Bag",
-          slug: "bag",
         },
         {
           name: "Ear Phone",
           slug: "ear-phone",
         },
         {
-          name: "Rosenberger",
-          slug: "rosenberger",
-        },
-        {
           name: "Speaker",
           slug: "speaker",
-        },
-        {
-          name: "Digital X",
-          slug: "digital-x",
-        },
-        {
-          name: "Baseus",
-          slug: "baseus",
-        },
-        {
-          name: "Fiesta",
-          slug: "fiesta",
-        },
-        {
-          name: "Redragon",
-          slug: "redragon",
-        },
-        {
-          name: "Tucano",
-          slug: "tucano",
-        },
-        {
-          name: "Dahua",
-          slug: "dahua",
-        },
-        {
-          name: "Microsoft",
-          slug: "microsoft",
-        },
-        {
-          name: "Yuanxin",
-          slug: "yuanxin",
-        },
-        {
-          name: "Energizer",
-          slug: "energizer",
         },
       ],
     },
@@ -1477,93 +1330,6 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
   );
 }
 
-// function NavItem({ name, categories, ...props }) {
-//   return (
-//     <Menu as="div" className="relative ml-4 flex-shrink-0">
-//       <div>
-//         <Menu.Button className="flex rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2">
-//           <a className="px-4 py-1">
-//             <span className="font mr-2 text-sm">{name}</span>
-//             <i className={props.icon}></i>{" "}
-//           </a>
-//         </Menu.Button>
-//       </div>
-//       <Transition
-//         as={Fragment}
-//         enter="transition ease-out duration-100"
-//         enterFrom="transform opacity-0 scale-95"
-//         enterTo="transform opacity-100 scale-100"
-//         leave="transition ease-in duration-75"
-//         leaveFrom="transform opacity-100 scale-100"
-//         leaveTo="transform opacity-0 scale-95"
-//       >
-//         <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-//           {categories.map((category) => (
-//             <Menu.Item key={category.name}>
-//               {({ active }) => (
-//                 <NavItem2
-//                   icon="fa-solid fa-caret-down"
-//                   name={category.name}
-//                   category={category.slug}
-//                   subcategories={category.sub_categories}
-//                   className={classNames(
-//                     active ? "bg-gray-100" : "",
-//                     "block px-4 py-2 text-sm text-gray-700"
-//                   )}
-//                   active={active}
-//                 ></NavItem2>
-//               )}
-//             </Menu.Item>
-//           ))}
-//         </Menu.Items>
-//       </Transition>
-//     </Menu>
-//   );
-// }
-// function NavItem2({ name, category, subcategories, ...props }) {
-//   return (
-//     <Menu as="div" className="relative ml-4 flex-shrink-0">
-//       <div>
-//         <Menu.Button
-//           className={classNames(
-//             props.active ? "bg-gray-100" : "",
-//             "block px-4 py-2 text-sm text-gray-700"
-//           )}
-//         >
-//           {name}
-//         </Menu.Button>
-//       </div>
-//       <Transition
-//         as={Fragment}
-//         enter="transition ease-out duration-100"
-//         enterFrom="transform opacity-0 scale-95"
-//         enterTo="transform opacity-100 scale-100"
-//         leave="transition ease-in duration-75"
-//         leaveFrom="transform opacity-100 scale-100"
-//         leaveTo="transform opacity-0 scale-95"
-//       >
-//         <Menu.Items className="absolute left-48 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-//           {subcategories.map((subcategory) => (
-//             <Menu.Item key={subcategory.name}>
-//               {({ active }) => (
-//                 <Link
-//                   href={`/category/${category}/${subcategory.slug}`}
-//                   className={classNames(
-//                     active ? "bg-gray-100" : "",
-//                     "block px-4 py-2 text-sm text-gray-700"
-//                   )}
-//                 >
-//                   {subcategory.name}
-//                 </Link>
-//               )}
-//             </Menu.Item>
-//           ))}
-//         </Menu.Items>
-//       </Transition>
-//     </Menu>
-//   );
-// }
-
 function categoryMenu() {
   return (
     <div className="mx-auto flex w-full max-w-7xl justify-between px-2 text-sm  font-medium sm:px-4 lg:px-8">
@@ -1584,7 +1350,13 @@ function categoryMenu() {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items
+                className={`absolute left-0 mt-2 ${
+                  category.sub_categories.length > 10
+                    ? "grid w-96 grid-cols-2 "
+                    : "w-48"
+                } origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              >
                 <Menu.Item>
                   {({ active }) => (
                     <Link

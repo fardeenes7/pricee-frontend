@@ -22,10 +22,12 @@ export default function Search() {
             className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 leading-5 placeholder-gray-500 focus:border-accent-1 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-accent-1 sm:text-sm"
             placeholder="Search"
             type="search"
-            value={search}
+            {...(search && { value: search })}
             onChange={(e) => setSearch(e.target.value)}
           />
           <button
+            id="search_button"
+            aria-label="Search Button"
             type="submit"
             className=" absolute inset-y-0 right-0 flex items-center pr-3"
           >

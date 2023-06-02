@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function Product(props) {
-  const { product, key } = props;
+  const { product, id } = props;
   const [isFav, setIsFav] = useState(false);
   return (
     <>
@@ -11,28 +11,26 @@ export default function Product(props) {
         <Image
           className="h-full w-full object-contain object-center transition-all duration-500 group-hover:scale-110 lg:h-full lg:w-full"
           src={product.image.href}
-          alt=""
-          loading="lazy"
+          alt={product.name}
           fill
-          // loader={({ src }) => src}
-          placeholder="blur"
           blurDataURL={product.image.href}
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={true}
         />
       </div>
-      <div className="flex h-full flex-col justify-between gap-6 p-4 ">
+      <div className="flex h-full flex-col justify-between gap-3 p-4 ">
         <h1 className="text-xs font-medium transition-all duration-500 group-hover:text-complement md:text-sm">
           {product.name}
         </h1>
         <div className="flex items-end justify-between">
           <div>
-            <h6 className="text-xs font-bold text-gray-700 ">Best Price</h6>
-            <h5 className="group-hover:text-md text-sm font-bold">
+            <span className="text-xs font-bold text-gray-700 ">Best Price</span>
+            <p className="group-hover:text-md text-sm font-bold">
               {product.best_price} BDT
-            </h5>
+            </p>
           </div>
           <div>
-            <button>
+            <button id={`wishlist-${id}`} aria-label="Add to Wishlist">
               <i
                 className={`${isFav ? "fa-solid" : "fa-regular"} fa-heart`}
               ></i>

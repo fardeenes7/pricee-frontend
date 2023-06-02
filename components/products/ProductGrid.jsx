@@ -113,8 +113,6 @@ export default function ProductGrid(props) {
         {props.category && `${props.category.replace(/-/g, " ").toUpperCase()}`}
         {props.subcategory &&
           ` ${props.subcategory.replace(/-/g, " ").toUpperCase()}`}
-        {/* {props.search &&
-          } */}
         {!props.category &&
           !props.subcategory &&
           !props.search &&
@@ -141,11 +139,11 @@ export default function ProductGrid(props) {
             <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
               {products.map((product, id) => (
                 <Link
+                  key={id}
                   href={`/product/${product.slug}`}
                   className="group flex flex-col overflow-hidden rounded-xl border-2 bg-white/50"
-                  key={id}
                 >
-                  <Product product={product} id={id} />
+                  <Product key={id} product={product} id={id} />
                 </Link>
               ))}
             </div>
