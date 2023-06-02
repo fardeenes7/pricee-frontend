@@ -26,10 +26,6 @@ async function getData({ slug }) {
 
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
-  console.log(product.images[0].href);
-  // useEffect(() => {
-  //   recordProductView(product.id);
-  // }, []);
 
   return {
     title: product.name + " | Pricee",
@@ -46,10 +42,6 @@ export async function generateMetadata({ params }) {
     },
   };
 }
-
-// const recordProductView = dynamic(() => import("./recordView"), {
-//   ssr: false,
-// });
 
 export default async function Product({ params }) {
   const { slug } = params;

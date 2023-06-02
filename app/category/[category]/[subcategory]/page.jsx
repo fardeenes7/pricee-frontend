@@ -1,6 +1,18 @@
 import ProductGrid from "@/components/products/ProductGrid";
 import Breadcrumb from "../../../../components/navigation/breadcrumb";
 
+export async function generateMetadata({ params }, parent) {
+  const category = params.subcategory;
+
+  return {
+    title: "Category: " + category,
+    description: "Find the best deals for " + category + " only on Pricee",
+    // openGraph: {
+    //   images: ["/some-specific-page-image.jpg", ...previousImages],
+    // },
+  };
+}
+
 export default function ProductSubCategory({ params }) {
   const { subcategory } = params;
   const cat = {

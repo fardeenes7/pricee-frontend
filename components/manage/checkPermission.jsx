@@ -7,7 +7,7 @@ export const checkPermission = async () => {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/manage/permission/`,
+      `${process.env.NEXT_PUBLIC_API_MANAGE_URL}/permission/`,
       {
         method: "GET",
         headers: {
@@ -42,7 +42,7 @@ export const checkPermission = async () => {
       localStorage.setItem("access_token", access);
 
       const res2 = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/manage/permission/`,
+        `${process.env.NEXT_PUBLIC_API_MANAGE_URL}/permission/`,
         {
           method: "GET",
           headers: {

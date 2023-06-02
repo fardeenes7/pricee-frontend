@@ -1,5 +1,30 @@
 import { getUser } from "./getUser";
 
+export async function refreshToken() {
+  const refresh = localStorage.getItem("refresh_token");
+  if (!refresh) return null;
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refresh: refresh }),
+      }
+    );
+    const { access } = await res.json();
+    localStorage.setItem("access_token", access);
+  } catch (error) {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user");
+    window.location.reload();
+    return null;
+  }
+}
+
 export async function loginwithSocial(accesstoken) {
   return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/social`, {
     method: "POST",
@@ -39,36 +64,8 @@ export const Logout = async () => {
       localStorage.removeItem("user");
       window.location.reload();
     } else {
-      // If the response is not OK, try to refresh the access token
-      return fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/token/refresh`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refresh: refresh_token }),
-
-          // body: JSON.stringify({ refresh: refreshToken }),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          localStorage.setItem("access_token", data.access);
-          const newRequestOptions = {
-            method: "POST",
-            headers: { Authorization: `Bearer ${data.access}` },
-          };
-          return fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/logout`,
-            newRequestOptions
-          ).then((response) => {
-            if (response.ok) {
-              localStorage.removeItem("access_token");
-              localStorage.removeItem("refresh_token");
-              localStorage.removeItem("user");
-              window.location.reload();
-            }
-          });
-        });
+      refreshToken();
+      Logout();
     }
   });
 };

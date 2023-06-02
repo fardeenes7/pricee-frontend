@@ -10,6 +10,8 @@ import Link from "next/link";
 import { Logout } from "../auth/auth";
 import CategoryGrid from "../landing/CategoryGrid";
 import { getUser } from "../auth/getUser";
+import Search from "../search/Search";
+import { refreshToken } from "../auth/auth";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,10 +32,6 @@ const navigation = {
           slug: "sound-card",
         },
         {
-          name: "Vention",
-          slug: "vention",
-        },
-        {
           name: "USB HUB",
           slug: "usb-hub",
         },
@@ -46,24 +44,12 @@ const navigation = {
           slug: "presenter",
         },
         {
-          name: "Combo",
-          slug: "combo",
-        },
-        {
           name: "Capture Card",
           slug: "capture-card",
         },
         {
           name: "Portable Speaker",
           slug: "portable-speaker",
-        },
-        {
-          name: "Bluetooth",
-          slug: "bluetooth",
-        },
-        {
-          name: "Apple Pencil",
-          slug: "apple-pencil",
         },
         {
           name: "Wifi-Adapter",
@@ -74,84 +60,20 @@ const navigation = {
           slug: "power-bank",
         },
         {
-          name: "Media Converter",
-          slug: "media-converter",
-        },
-        {
-          name: "Floor Mat",
-          slug: "floor-mat",
-        },
-        {
-          name: "Console Converter",
-          slug: "console-converter",
-        },
-        {
           name: "Cable & convertor",
           slug: "cable-convertor",
-        },
-        {
-          name: "Mouse pad",
-          slug: "mouse-pad",
-        },
-        {
-          name: "Neckband",
-          slug: "neckband",
-        },
-        {
-          name: "Keyboard",
-          slug: "keyboard",
-        },
-        {
-          name: "Converter & Cable",
-          slug: "converter-cable",
         },
         {
           name: "Headphone",
           slug: "headphone",
         },
         {
-          name: "Gamepad",
-          slug: "gamepad",
-        },
-        {
           name: "Backpack",
           slug: "backpack",
         },
         {
-          name: "Calculator",
-          slug: "calculator",
-        },
-        {
-          name: "LED Strip",
-          slug: "led-strip",
-        },
-        {
-          name: "Smart Band",
-          slug: "smart-band",
-        },
-        {
           name: "Drones",
           slug: "drones",
-        },
-        {
-          name: "Studio Equipment",
-          slug: "studio-equipment",
-        },
-        {
-          name: "Earbuds",
-          slug: "earbuds",
-        },
-        {
-          name: "Stream Deck",
-          slug: "stream-deck",
-        },
-        {
-          name: "Wrist Pad",
-          slug: "wrist-pad",
-        },
-        {
-          name: "Keyboard Keycaps",
-          slug: "keyboard-keycaps",
         },
         {
           name: "Microphone",
@@ -169,10 +91,7 @@ const navigation = {
           name: "Speakers",
           slug: "speakers",
         },
-        {
-          name: "Targus",
-          slug: "targus",
-        },
+
         {
           name: "Mouse Pad",
           slug: "mouse-pad",
@@ -186,14 +105,6 @@ const navigation = {
           slug: "mouse",
         },
         {
-          name: "Exclusive",
-          slug: "exclusive",
-        },
-        {
-          name: "Splitter",
-          slug: "splitter",
-        },
-        {
           name: "Sewing Machine",
           slug: "sewing-machine",
         },
@@ -202,72 +113,16 @@ const navigation = {
           slug: "smart-watch",
         },
         {
-          name: "Vivanco",
-          slug: "vivanco",
-        },
-        {
-          name: "Qgeem",
-          slug: "qgeem",
-        },
-        {
-          name: "Blower",
-          slug: "blower",
-        },
-        {
           name: "Daily Lifestyle",
           slug: "daily-lifestyle",
-        },
-        {
-          name: "Bag",
-          slug: "bag",
         },
         {
           name: "Ear Phone",
           slug: "ear-phone",
         },
         {
-          name: "Rosenberger",
-          slug: "rosenberger",
-        },
-        {
           name: "Speaker",
           slug: "speaker",
-        },
-        {
-          name: "Digital X",
-          slug: "digital-x",
-        },
-        {
-          name: "Baseus",
-          slug: "baseus",
-        },
-        {
-          name: "Fiesta",
-          slug: "fiesta",
-        },
-        {
-          name: "Redragon",
-          slug: "redragon",
-        },
-        {
-          name: "Tucano",
-          slug: "tucano",
-        },
-        {
-          name: "Dahua",
-          slug: "dahua",
-        },
-        {
-          name: "Microsoft",
-          slug: "microsoft",
-        },
-        {
-          name: "Yuanxin",
-          slug: "yuanxin",
-        },
-        {
-          name: "Energizer",
-          slug: "energizer",
         },
       ],
     },
@@ -1200,7 +1055,6 @@ const navigation = {
 
 export default function Header({ setLoginModalOpen, isProfilePage }) {
   const [user, setUser] = useState(null);
-
   const logout = async () => {
     await Logout();
     setUser(null);
@@ -1216,6 +1070,11 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
     if (user === null) {
       fetchData();
     }
+    const token = localStorage.getItem("refresh_token");
+    const interval = setInterval(() => {
+      if (token) refreshToken();
+    }, 58 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -1259,26 +1118,7 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                 </div>
               </div>
               <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
-                <div className="w-full max-w-lg lg:max-w-xs">
-                  <label htmlFor="search" className="sr-only">
-                    Search
-                  </label>
-                  <div className="relative">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <i
-                        className="fa-solid fa-magnifying-glass h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                    <input
-                      id="search"
-                      name="search"
-                      className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-accent-1 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-accent-1 sm:text-sm"
-                      placeholder="Search"
-                      type="search"
-                    />
-                  </div>
-                </div>
+                <Search />
               </div>
               <div className="flex items-center lg:hidden">
                 {/* Mobile menu button */}
@@ -1322,32 +1162,51 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 font-medium shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              href="/user/profile"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Your Profile
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              href="/user/settings"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Settings
-                            </Link>
-                          )}
-                        </Menu.Item>
+                        {user.is_staff && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                href="/manage"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Admin Dashboard
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
+                        {!user.is_staff && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                href="/user/profile"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Your Profile
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
+                        {!user.is_staff && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                href="/user/settings"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Settings
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
                         <Menu.Item>
                           {({ active }) => (
                             <button
@@ -1471,93 +1330,6 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
   );
 }
 
-// function NavItem({ name, categories, ...props }) {
-//   return (
-//     <Menu as="div" className="relative ml-4 flex-shrink-0">
-//       <div>
-//         <Menu.Button className="flex rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2">
-//           <a className="px-4 py-1">
-//             <span className="font mr-2 text-sm">{name}</span>
-//             <i className={props.icon}></i>{" "}
-//           </a>
-//         </Menu.Button>
-//       </div>
-//       <Transition
-//         as={Fragment}
-//         enter="transition ease-out duration-100"
-//         enterFrom="transform opacity-0 scale-95"
-//         enterTo="transform opacity-100 scale-100"
-//         leave="transition ease-in duration-75"
-//         leaveFrom="transform opacity-100 scale-100"
-//         leaveTo="transform opacity-0 scale-95"
-//       >
-//         <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-//           {categories.map((category) => (
-//             <Menu.Item key={category.name}>
-//               {({ active }) => (
-//                 <NavItem2
-//                   icon="fa-solid fa-caret-down"
-//                   name={category.name}
-//                   category={category.slug}
-//                   subcategories={category.sub_categories}
-//                   className={classNames(
-//                     active ? "bg-gray-100" : "",
-//                     "block px-4 py-2 text-sm text-gray-700"
-//                   )}
-//                   active={active}
-//                 ></NavItem2>
-//               )}
-//             </Menu.Item>
-//           ))}
-//         </Menu.Items>
-//       </Transition>
-//     </Menu>
-//   );
-// }
-// function NavItem2({ name, category, subcategories, ...props }) {
-//   return (
-//     <Menu as="div" className="relative ml-4 flex-shrink-0">
-//       <div>
-//         <Menu.Button
-//           className={classNames(
-//             props.active ? "bg-gray-100" : "",
-//             "block px-4 py-2 text-sm text-gray-700"
-//           )}
-//         >
-//           {name}
-//         </Menu.Button>
-//       </div>
-//       <Transition
-//         as={Fragment}
-//         enter="transition ease-out duration-100"
-//         enterFrom="transform opacity-0 scale-95"
-//         enterTo="transform opacity-100 scale-100"
-//         leave="transition ease-in duration-75"
-//         leaveFrom="transform opacity-100 scale-100"
-//         leaveTo="transform opacity-0 scale-95"
-//       >
-//         <Menu.Items className="absolute left-48 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-//           {subcategories.map((subcategory) => (
-//             <Menu.Item key={subcategory.name}>
-//               {({ active }) => (
-//                 <Link
-//                   href={`/category/${category}/${subcategory.slug}`}
-//                   className={classNames(
-//                     active ? "bg-gray-100" : "",
-//                     "block px-4 py-2 text-sm text-gray-700"
-//                   )}
-//                 >
-//                   {subcategory.name}
-//                 </Link>
-//               )}
-//             </Menu.Item>
-//           ))}
-//         </Menu.Items>
-//       </Transition>
-//     </Menu>
-//   );
-// }
-
 function categoryMenu() {
   return (
     <div className="mx-auto flex w-full max-w-7xl justify-between px-2 text-sm  font-medium sm:px-4 lg:px-8">
@@ -1578,7 +1350,13 @@ function categoryMenu() {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items
+                className={`absolute left-0 mt-2 ${
+                  category.sub_categories.length > 10
+                    ? "grid w-96 grid-cols-2 "
+                    : "w-48"
+                } origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              >
                 <Menu.Item>
                   {({ active }) => (
                     <Link
