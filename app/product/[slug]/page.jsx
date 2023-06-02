@@ -62,7 +62,7 @@ export default async function Product({ params }) {
   ];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4">
       <RecordProductView id={data.id} />
       <Breadcrumb cat={cat[0]} subcat={cat[1]} product={cat[2]} />
       <div className="grid gap-4 md:grid-cols-4">

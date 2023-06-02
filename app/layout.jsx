@@ -39,7 +39,7 @@ export default async function RootLayout({ children, ...props }) {
           href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
         />
       </head>
-      <Layout children={children} />
+      <Layout children={children} {...props} />
     </html>
   );
 }

@@ -1225,12 +1225,12 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                   </Menu>
                 )}
                 {!user && (
-                  <button
-                    onClick={setLoginModalOpen}
+                  <Link
+                    href="/auth/login"
                     className="rounded-md bg-accent-1 px-4 py-2 text-xs font-semibold text-secondary hover:bg-accent-2"
                   >
                     Login
-                  </button>
+                  </Link>
                 )}
               </div>
             </div>
