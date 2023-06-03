@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Fragment, useState, useEffect } from "react";
+import { useCallback, Fragment, useState, useEffect } from "react";
 import Image from "next/image";
 import FacebookIcon from "../facebook.svg";
 import GoogleIcon from "../google.svg";
@@ -14,6 +14,10 @@ import { auth } from "@/firebase";
 
 import { loginwithSocial } from "../auth";
 import { getUser } from "../getUser";
+import { useRouter } from "next/navigation";
+
+// import { toast } from "react-hot-toast";
+import toast from "@/components/toast";
 
 export default function LoginModal() {
   const googleProvider = new GoogleAuthProvider();
@@ -27,6 +31,19 @@ export default function LoginModal() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const onDismiss = useCallback(() => {
+    router.back();
+    router.reload();
+  }, [router]);
+
+  const successToast = () => {
+    toast("Successfully logged in", "success", "", "reload");
+  };
+
+  const errorToast = () => {
+    toast("Something bad happened!", "error", "Please try again");
+  };
 
   useEffect(() => {
     // check and validate email
@@ -46,13 +63,14 @@ export default function LoginModal() {
     } else {
       setError(false);
     }
+    if (errorMessage != "") {
+    }
   }, [email, password]);
 
   const googleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       loginwithSocial(result.user.accessToken);
-      setClose;
     } catch (error) {
       console.log(error);
     }
@@ -63,9 +81,10 @@ export default function LoginModal() {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       loginwithSocial(result.user.accessToken);
-      setClose;
+      successToast();
     } catch (error) {
       setErrorMessage(error.message);
+      errorToast();
     }
   };
 
@@ -100,7 +119,8 @@ export default function LoginModal() {
         localStorage.setItem("refresh_token", data.tokens.refresh);
         getUser();
         setLoading(false);
-        window.location.reload();
+        successToast();
+        onDismiss();
       }
     } catch (err) {
       setErrorMessage(err.message);

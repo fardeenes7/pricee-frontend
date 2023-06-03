@@ -8,10 +8,10 @@ import LogoText from "../../public/priceetextlogo.svg";
 import Logo from "../../public/pricee.svg";
 import Link from "next/link";
 import { Logout } from "../auth/auth";
-import CategoryGrid from "../landing/CategoryGrid";
 import { getUser } from "../auth/getUser";
 import Search from "../search/Search";
 import { refreshToken } from "../auth/auth";
+import MobileMenu from "./mobile-menu";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -1054,6 +1054,7 @@ const navigation = {
 };
 
 export default function Header({ setLoginModalOpen, isProfilePage }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const logout = async () => {
     await Logout();
@@ -1096,33 +1097,32 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                     alt="Pricee"
                   ></Image>
                 </Link>
-                <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
-                  <Link
-                    href="/"
-                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  >
-                    PC Builder
-                  </Link>
-                  <Link
-                    href="/user/collections"
-                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  >
-                    Collections
-                  </Link>
-                  <Link
-                    href="/user/wishlist"
-                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  >
-                    Wishlist
-                  </Link>
-                </div>
+                {user && (
+                  <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
+                    <Link
+                      href="/user/profile"
+                      className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/user/settings"
+                      className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      Settings
+                    </Link>
+                  </div>
+                )}
               </div>
               <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
                 <Search />
               </div>
               <div className="flex items-center lg:hidden">
                 {/* Mobile menu button */}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-1">
+                <Disclosure.Button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-1"
+                >
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <i
@@ -1162,6 +1162,20 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 font-medium shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <Link
+                              href="/"
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Home Page
+                            </Link>
+                          )}
+                        </Menu.Item>
+
                         {user.is_staff && (
                           <Menu.Item>
                             {({ active }) => (
@@ -1239,91 +1253,7 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
             {!isProfilePage && categoryMenu()}
           </div>
 
-          <Disclosure.Panel className="lg:hidden">
-            <div className="space-y-1 pb-3 pt-2">
-              {/* Current: "bg-indigo-50 border-accent-1 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block border-l-4 border-accent-1 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              >
-                Dashboard
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-              >
-                Team
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-              >
-                Projects
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-              >
-                Calendar
-              </Disclosure.Button>
-            </div>
-            <div className="border-t border-gray-200 pb-3 pt-4">
-              <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">
-                    {user ? user.name : "Anonymous"}
-                  </div>
-                  <div className="text-sm font-medium text-gray-500">
-                    {user ? user.email : ""}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <i
-                    className="fa-solid fa-bell h-6 w-6"
-                    aria-hidden="true"
-                  ></i>
-                </button>
-              </div>
-              <div className="mt-3 space-y-1">
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Your Profile
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Settings
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Sign out
-                </Disclosure.Button>
-              </div>
-            </div>
-          </Disclosure.Panel>
+          {mobileMenuOpen && <MobileMenu user={user} navigation={navigation} />}
         </>
       )}
     </Disclosure>

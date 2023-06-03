@@ -7,6 +7,7 @@ import ForgotPasswordModal from "../components/auth/forgotPasswordModal";
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 export default function Layout(props) {
   const pathname = usePathname();
 
@@ -23,7 +24,9 @@ export default function Layout(props) {
           isProfilePage={props.isProfile}
         />
         <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">
+          <Toaster position="top-right" reverseOrder={true} />
           {props.children} {props.modal}
+          {props.legal}
         </main>
         <Footer />
       </body>

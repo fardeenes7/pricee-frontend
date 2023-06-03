@@ -16,7 +16,7 @@ export default function userSettings() {
   }, [router.asPath]);
   return (
     <div className="flex flex-col gap-4">
-      <div className="card sm:rounded-lg">
+      {/* <div className="card sm:rounded-lg">
         <div className="lg:m-4">
           <div>
             <h3 className="text-lg font-medium leading-6 text-gray-900">
@@ -154,7 +154,7 @@ export default function userSettings() {
             </fieldset>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="card sm:rounded-lg" id="delete_account">
         <div className="px-4 py-5 sm:p-6">
           <h3 className="text-lg font-medium leading-6 text-gray-900">

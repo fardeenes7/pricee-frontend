@@ -1,39 +1,24 @@
-const stats = [
-  {
-    id: 1,
-    name: "Total Users",
-    stat: "71,897",
-    icon: "fas fa-users",
-    change: "122",
-    changeType: "increase",
-  },
-  {
-    id: 2,
-    name: "Products",
-    stat: "58.16%",
-    icon: "fas fa-shopping-bag",
-    change: "5.4%",
-    changeType: "increase",
-  },
-  {
-    id: 3,
-    name: "Product Views",
-    stat: "24.57%",
-    icon: "fas fa-eye",
-    change: "3.2%",
-    changeType: "decrease",
-  },
-];
-
+import Link from "next/link";
+async function getData() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_MANAGE_URL}/dashboard/`,
+    { cache: "no-store" }
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Manage() {
-  return <Stats />;
+export default async function Manage() {
+  const data = await getData();
+  return <Stats data={data.stats} />;
 }
 
-function Stats() {
+function Stats({ data }) {
   return (
     <div>
       <h3 className="text-lg font-medium leading-6 text-gray-900">
@@ -41,7 +26,7 @@ function Stats() {
       </h3>
 
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((item) => (
+        {data.map((item) => (
           <div
             key={item.id}
             className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
@@ -58,41 +43,42 @@ function Stats() {
               <p className="text-2xl font-semibold text-gray-900">
                 {item.stat}
               </p>
-              <p
-                className={classNames(
-                  item.changeType === "increase"
-                    ? "text-green-600"
-                    : "text-red-600",
-                  "ml-2 flex items-baseline text-sm font-semibold"
-                )}
-              >
-                {item.changeType === "increase" ? (
-                  <i
-                    className="fa-solid fa-arrow-up h-5 w-5 flex-shrink-0 self-center text-green-500"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <i
-                    className="fa-solid fa-arrow-down h-5 w-5 flex-shrink-0 self-center text-red-500"
-                    aria-hidden="true"
-                  />
-                )}
-
-                <span className="sr-only">
-                  {item.changeType === "increase" ? "Increased" : "Decreased"}{" "}
-                  by
-                </span>
-                {item.change}
-              </p>
+              {item.changeType != "none" && (
+                <p
+                  className={classNames(
+                    item.changeType === "increase"
+                      ? "text-green-600"
+                      : "text-red-600",
+                    "ml-2 flex items-baseline text-sm font-semibold"
+                  )}
+                >
+                  {item.changeType === "increase" ? (
+                    <i
+                      className="fa-solid fa-arrow-up h-5 w-5 flex-shrink-0 self-center text-green-500"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <i
+                      className="fa-solid fa-arrow-down h-5 w-5 flex-shrink-0 self-center text-red-500"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="sr-only">
+                    {item.changeType === "increase" ? "Increased" : "Decreased"}{" "}
+                    by
+                  </span>
+                  {item.change} %
+                </p>
+              )}
               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
                 <div className="text-sm">
-                  <a
-                    href="#"
+                  <Link
+                    href={`/manage/${item.href}`}
                     className="font-medium text-accent-2 hover:text-accent-1"
                   >
                     {" "}
                     View all<span className="sr-only"> {item.name} stats</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </dd>

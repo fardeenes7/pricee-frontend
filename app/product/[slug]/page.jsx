@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 // import { useEffect } from "react";
 import Breadcrumb from "../../../components/navigation/breadcrumb";
 import ImageSection from "./ImageSection";
@@ -18,34 +19,45 @@ async function getData({ slug }) {
       next: { revalidate: 10 },
     }
   );
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
+  console.log(res.status);
+  if (!res.ok) return undefined;
   return res.json();
 }
 
 export async function generateMetadata({ params }) {
   const product = await getData({ slug: params.slug });
 
-  return {
-    title: product.name + " | Pricee",
-    openGraph: {
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      openGraph: {
+        title: "Product Not Found",
+      },
+    };
+  } else {
+    return {
       title: product.name + " | Pricee",
-      images: [
-        {
-          url: `${process.env.HOST}/api/og/product?title=${product.name}&image=${product.images[0].href}`,
-          alt: product.name,
-          height: 630,
-          width: 1200,
-        },
-      ],
-    },
-  };
+      openGraph: {
+        title: product.name + " | Pricee",
+        images: [
+          {
+            url: `${process.env.HOST}/api/og/product?title=${product.name}&image=${product.images[0].href}`,
+            alt: product.name,
+            height: 630,
+            width: 1200,
+          },
+        ],
+      },
+    };
+  }
 }
 
 export default async function Product({ params }) {
   const { slug } = params;
   const data = await getData({ slug });
+  if (!data) {
+    notFound();
+  }
   const cat = [
     {
       name: data.sub_category.category,
@@ -60,31 +72,31 @@ export default async function Product({ params }) {
       href: `/product/${slug}`,
     },
   ];
-
-  return (
-    <div className="flex h-full w-full flex-col gap-4">
-      <RecordProductView id={data.id} />
-      <Breadcrumb cat={cat[0]} subcat={cat[1]} product={cat[2]} />
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="md:col-span-2">
-          <ImageSection images={data.images} />
-        </div>
-        <div className="md:col-span-2">
-          <TitleSection
-            name={data.name}
-            best_price={data.best_price}
-            links={data.links}
-            brand={data.brand}
-            model={data.model}
-          />
-        </div>
-        <div className="md:col-span-3">
-          <InfoSection features={data.features} />
-        </div>
-        <div>
-          <Suggestions products={data.suggestions} />
+  if (data)
+    return (
+      <div className="flex h-full w-full flex-col gap-4">
+        <RecordProductView id={data.id} />
+        <Breadcrumb cat={cat[0]} subcat={cat[1]} product={cat[2]} />
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="md:col-span-2">
+            <ImageSection images={data.images} />
+          </div>
+          <div className="md:col-span-2">
+            <TitleSection
+              name={data.name}
+              best_price={data.best_price}
+              links={data.links}
+              brand={data.brand}
+              model={data.model}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <InfoSection features={data.features} />
+          </div>
+          <div>
+            <Suggestions products={data.suggestions} />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
