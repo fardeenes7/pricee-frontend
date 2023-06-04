@@ -7,28 +7,43 @@ import ForgotPasswordModal from "../components/auth/forgotPasswordModal";
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-export default function Layout({ children }) {
+import { Toaster } from "react-hot-toast";
+export default function Layout(props) {
   const pathname = usePathname();
 
   const isManage = pathname.startsWith("/manage");
   const isProfile = pathname.startsWith("/user");
 
   if (isManage) {
-    return <body>{children}</body>;
+    return <body>{props.children}</body>;
   } else {
-    return <HomeLayout children={children} isProfile={isProfile} />;
+    return (
+      <body className="flex min-h-screen flex-col bg-secondary selection:bg-accent-1 selection:text-white">
+        <Header
+          setLoginModalOpen={() => setLoginModalOpen(1)}
+          isProfilePage={props.isProfile}
+        />
+        <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">
+          <Toaster position="top-right" reverseOrder={true} />
+          {props.children} {props.modal}
+        </main>
+        <Footer />
+      </body>
+    );
   }
 }
 
-function HomeLayout({ children, isProfile }) {
+function HomeLayout(props) {
   const [loginModalOpen, setLoginModalOpen] = useState(0);
   return (
-    <body className="flex min-h-screen flex-col bg-secondary selection:bg-accent-1 selection:text-white">
+    <div className="flex min-h-screen flex-col bg-secondary selection:bg-accent-1 selection:text-white">
       <Header
         setLoginModalOpen={() => setLoginModalOpen(1)}
-        isProfilePage={isProfile}
+        isProfilePage={props.isProfile}
       />
-      <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">{children}</main>
+      <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">
+        {props.children} {props.modal && props.modal}
+      </main>
       <LoginModal
         open={loginModalOpen}
         setClose={() => setLoginModalOpen(0)}
@@ -48,6 +63,6 @@ function HomeLayout({ children, isProfile }) {
       />
 
       <Footer />
-    </body>
+    </div>
   );
 }

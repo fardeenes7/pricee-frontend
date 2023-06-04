@@ -20,19 +20,19 @@ async function getData() {
 
 const shops = [
   {
-    id: 1,
+    id: 2,
     name: "Techland",
     description: "Last message sent an hour ago",
     logo: "https://www.techlandbd.com/image/cache/wp/gp/techland/logo/techland-white-logo-300x48.webp",
   },
   {
-    id: 2,
+    id: 3,
     name: "Ryans",
     description: "Last message sent 2 weeks ago",
     logo: "https://www.ryanscomputers.com/assets/images/ryans-logo.svg",
   },
   {
-    id: 3,
+    id: 1,
     name: "Startech",
     description: "Last message sent 4 days ago",
     logo: "https://www.startech.com.bd/image/catalog/logo.png",

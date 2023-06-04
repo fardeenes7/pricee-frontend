@@ -83,9 +83,9 @@ export default function Profile() {
         <div className="card flex flex-col">
           <div className="h-36 bg-gradient-to-r from-yellow-100 to-red-200"></div>
           <div className="mx-6 -mt-16">
-            <div className="flex h-36 w-36 flex-col  rounded-full border-4 border-white bg-white p-2">
+            <div className="flex h-36 w-36 flex-col  overflow-hidden rounded-full border-4 border-white bg-white p-2">
               <img
-                className="h-36 w-36 rounded-full"
+                className="left-0 top-0 h-36 w-36 overflow-hidden rounded-full object-cover"
                 src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${user.profile_pic}`}
               />
             </div>
