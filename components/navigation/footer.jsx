@@ -12,17 +12,17 @@ const navigation = {
     { name: "Guides", href: "#" },
     { name: "API Status", href: "#" },
   ],
-  company: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Partners", href: "#" },
-  ],
-  legal: [
-    { name: "Claim", href: "#" },
+  about: [
+    { name: "About Pricee", href: "/about" },
+    { name: "Claim", href: "/claim" },
     { name: "Privacy", href: "/privacy-policy" },
-    { name: "Terms", href: "#" },
+    { name: "Terms", href: "/terms" },
+  ],
+  about2: [
+    { name: "Press", href: "/press" },
+    { name: "Partners", href: "/partners" },
+    { name: "Blog", href: "/blog" },
+    { name: "Jobs", href: "/jobs" },
   ],
   social: [
     {
@@ -137,10 +137,10 @@ export default function Example() {
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
-                  Company
+                  About
                 </h3>
                 <ul role="list" className="mt-4 space-y-2">
-                  {navigation.company.map((item) => (
+                  {navigation.about.map((item) => (
                     <li key={item.name}>
                       <Link
                         href={item.href}
@@ -154,10 +154,10 @@ export default function Example() {
               </div>
               <div className="mt-12 md:mt-0">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
-                  Legal
+                  About
                 </h3>
                 <ul role="list" className="mt-4 space-y-2">
-                  {navigation.legal.map((item) => (
+                  {navigation.about2.map((item) => (
                     <li key={item.name}>
                       <Link
                         href={item.href}

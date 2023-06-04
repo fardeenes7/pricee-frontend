@@ -26,7 +26,6 @@ export default function Layout(props) {
         <main className="w-full max-w-7xl px-2 py-4 lg:mx-auto">
           <Toaster position="top-right" reverseOrder={true} />
           {props.children} {props.modal}
-          {props.legal}
         </main>
         <Footer />
       </body>
