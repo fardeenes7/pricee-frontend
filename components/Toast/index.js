@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-export default function index(
+export default function Toast(
   title,
   status = "info",
   message = "",

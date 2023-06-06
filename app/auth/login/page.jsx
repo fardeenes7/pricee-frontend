@@ -17,7 +17,7 @@ import { getUser } from "../getUser";
 import { useRouter } from "next/navigation";
 
 // import { toast } from "react-hot-toast";
-import toast from "@/components/toast";
+import Toast from "@/components/Toast";
 
 export default function LoginModal() {
   const googleProvider = new GoogleAuthProvider();
@@ -38,11 +38,11 @@ export default function LoginModal() {
   }, [router]);
 
   const successToast = () => {
-    toast("Successfully logged in", "success", "", "reload");
+    Toast("Successfully logged in", "success", "", "reload");
   };
 
   const errorToast = () => {
-    toast("Something bad happened!", "error", "Please try again");
+    Toast("Something bad happened!", "error", "Please try again");
   };
 
   useEffect(() => {
