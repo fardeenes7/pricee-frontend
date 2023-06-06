@@ -1,5 +1,5 @@
 import { getUser } from "./getUser";
-import Toast from "@/components/Toast";
+// import Toast from "@/components/Toast";
 
 export async function refreshToken() {
   const refresh = localStorage.getItem("refresh_token");
@@ -47,9 +47,9 @@ export async function loginwithSocial(accesstoken) {
     .catch((err) => console.log(err));
 }
 
-const logoutSuccessToast = () => {
-  Toast("Successfully logged out", "success", "", "reload");
-};
+// const logoutSuccessToast = () => {
+//   Toast("Successfully logged out", "success", "", "reload");
+// };
 
 export const Logout = async () => {
   console.log("logout");
@@ -67,7 +67,7 @@ export const Logout = async () => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("user");
-      logoutSuccessToast();
+      // logoutSuccessToast();
       window.location.reload();
     } else {
       refreshToken();
