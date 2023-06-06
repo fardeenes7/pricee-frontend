@@ -119,7 +119,7 @@ export default function LoginModal() {
         localStorage.setItem("refresh_token", data.tokens.refresh);
         getUser();
         setLoading(false);
-        successToast();
+        // successToast();
         onDismiss();
       }
     } catch (err) {
