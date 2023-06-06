@@ -1071,11 +1071,11 @@ export default function Header({ setLoginModalOpen, isProfilePage }) {
     if (user === null) {
       fetchData();
     }
-    const token = localStorage.getItem("refresh_token");
-    const interval = setInterval(() => {
-      if (token) refreshToken();
-    }, 58 * 60 * 1000);
-    return () => clearInterval(interval);
+    // const token = localStorage.getItem("refresh_token");
+    // const interval = setInterval(() => {
+    //   if (token) refreshToken();
+    // }, 58 * 60 * 1000);
+    // return () => clearInterval(interval);
   }, []);
 
   return (
