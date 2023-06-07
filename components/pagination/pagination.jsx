@@ -25,8 +25,11 @@ const Pagination = ({ currentPage, totalPages }) => {
   const isFirstPage = page === 1;
   const isLastPage = page === totalPages;
 
-  const prevPage = page === 1 ? 1 : page - 1;
-  const nextPage = page === totalPages ? totalPages : page + 1;
+  // const prevPage = page === 1 ? 1 : page - 1;
+  const [prevPage, setPrevPage] = useState(page === 1 ? 1 : page - 1);
+  // const nextPage = page === totalPages ? totalPages : page + 1;s
+  const [nextPage, setNextPage] = useState(page === totalPages ? totalPages : page + 1);
+  console.log(prevPage, nextPage, page, totalPages, range, pages);
 
   const activePage = "z-10 bg-indigo-50 border-indigo-500 text-indigo-600";
   const defaultPage = "bg-white border-gray-300 text-gray-500 hover:bg-gray-50";

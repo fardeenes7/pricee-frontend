@@ -30,18 +30,18 @@ const navigation = [
     icon: "fa solid fa-bell",
     current: false,
   },
-  {
-    name: "Blog",
-    href: "/manage/blog",
-    icon: "fa solid fa-bell",
-    current: false,
-  },
-  {
-    name: "Documents",
-    href: "/manage/documents",
-    icon: "fa solid fa-bell",
-    current: false,
-  },
+  // {
+  //   name: "Blog",
+  //   href: "/manage/blog",
+  //   icon: "fa solid fa-bell",
+  //   current: false,
+  // },
+  // {
+  //   name: "Documents",
+  //   href: "/manage/documents",
+  //   icon: "fa solid fa-bell",
+  //   current: false,
+  // },
   {
     name: "Reports",
     href: "/manage/reports",
@@ -62,6 +62,7 @@ export default function ManageLayout({ children }) {
   const [user, setUser] = useState(null);
   const [is_staff, setIsStaff] = useState(false);
   let userNavigation = [
+    { name: "Landing Page", href: "/" },
     { name: "Your Profile", href: "/manage/users" },
     { name: "Settings", href: "#" },
     { name: "Sign out", href: "#" },

@@ -17,7 +17,7 @@ import { getUser } from "../getUser";
 import { useRouter } from "next/navigation";
 
 // import { toast } from "react-hot-toast";
-// import Toast from "@/components/Toast";
+import Toast from "@/components/Toast";
 
 export default function LoginModal() {
   const googleProvider = new GoogleAuthProvider();
@@ -37,13 +37,13 @@ export default function LoginModal() {
     router.reload();
   }, [router]);
 
-  // const successToast = () => {
-  //   Toast("Successfully logged in", "success", "", "reload");
-  // };
+  const successToast = () => {
+    Toast("Successfully logged in", "success", "", "reload");
+  };
 
-  // const errorToast = () => {
-  //   Toast("Something bad happened!", "error", "Please try again");
-  // };
+  const errorToast = () => {
+    Toast("Something bad happened!", "error", "Please try again");
+  };
 
   useEffect(() => {
     // check and validate email
@@ -81,7 +81,7 @@ export default function LoginModal() {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       loginwithSocial(result.user.accessToken);
-      // successToast();
+      successToast();
     } catch (error) {
       setErrorMessage(error.message);
       // errorToast();
@@ -119,7 +119,9 @@ export default function LoginModal() {
         localStorage.setItem("refresh_token", data.tokens.refresh);
         getUser();
         setLoading(false);
-        // successToast();
+        successToast();
+
+        router.push("/");
         onDismiss();
       }
     } catch (err) {

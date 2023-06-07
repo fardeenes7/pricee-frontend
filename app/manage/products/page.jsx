@@ -85,7 +85,7 @@ export default async function Products({ searchParams }) {
                           <div className="h-8 w-8 flex-shrink-0">
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={product.image.href}
+                              src={product.image && product.image.href}
                               alt=""
                             />
                           </div>

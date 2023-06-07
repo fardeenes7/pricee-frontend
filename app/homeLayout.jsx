@@ -8,7 +8,10 @@ import ForgotPasswordModal from "../components/auth/forgotPasswordModal";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+
 export default function Layout(props) {
+  const [loginModalOpen, setLoginModalOpen] = useState(0);
+
   const pathname = usePathname();
 
   const isManage = pathname.startsWith("/manage");
@@ -27,6 +30,23 @@ export default function Layout(props) {
           <Toaster position="top-right" reverseOrder={true} />
           {props.children} {props.modal}
         </main>
+        <LoginModal
+          open={loginModalOpen}
+          setClose={() => setLoginModalOpen(0)}
+          setRegisterModalOpen={() => setLoginModalOpen(2)}
+          setForgotPasswordModalOpen={() => setLoginModalOpen(3)}
+        />
+        <RegisterModal
+          open={loginModalOpen}
+          setClose={() => setLoginModalOpen(0)}
+          setLoginModalOpen={() => setLoginModalOpen(1)}
+        />
+        <ForgotPasswordModal
+          open={loginModalOpen}
+          setClose={() => setLoginModalOpen(0)}
+          setLoginModalOpen={() => setLoginModalOpen(1)}
+          setRegisterModalOpen={() => setLoginModalOpen(2)}
+        />
         <Footer />
       </body>
     );

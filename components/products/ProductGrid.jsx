@@ -85,6 +85,8 @@ export default function ProductGrid(props) {
           },
         }
       );
+      console.log(response.status);
+      console.log(endpoint);
       if (response.status != 200) {
         new error(response.status);
       }
