@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
     scrollRestoration: true,
   },
   images: {
@@ -31,7 +30,6 @@ const nextConfig = {
         pathname: "**",
       },
     ],
-    domains: ["127.0.0.1"],
   },
 };
 
